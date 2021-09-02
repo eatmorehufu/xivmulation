@@ -1,0 +1,12 @@
+[package]
+name = "ffxivsim"
+version = "0.1.0"
+authors = ["Josiah Kiehl <kiehl@hey.com>", "Dean Hu <addyouremail@example.com>"]
+edition = "2018"
+
+[dependencies]
+bevy_app = "0.5.0"
+bevy_ecs = "0.5.0"
+bevy_core = "0.5.0"
+bevy_utils = "0.5.0"
+delegate = "0.6.1"
