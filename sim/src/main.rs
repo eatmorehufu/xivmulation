@@ -1,77 +1,60 @@
 mod actor;
 mod sim;
 
-use actor::{Actor, Appliable, Target};
+use actor::action::Actions;
+use actor::damage::Damage;
+use actor::recast_expirations::RecastExpirations;
+use actor::rotation::{Rotation, RotationEntry};
+use actor::{Actor, Target};
 use bevy_app::{App, ScheduleRunnerPlugin, ScheduleRunnerSettings};
 use bevy_ecs::prelude::*;
 use bevy_utils::Duration;
-use sim::SimTime;
-
-const TICKS_PER_SECOND: SimTime = 20;
-const MS_PER_TICK: SimTime = 1000 / TICKS_PER_SECOND;
-
-struct Sim {
-    milliseconds: SimTime,
-}
-
-impl Sim {
-    pub fn tick(&mut self) {
-        self.milliseconds += MS_PER_TICK;
-    }
-
-    pub fn milliseconds(&self) -> SimTime {
-        self.milliseconds
-    }
-}
+use sim::{SimState, SimTime};
 
 fn setup(mut commands: Commands) {
-    let mut actor = Actor::default();
-    actor.actions.insert(
-        0,
-        actor::Action {
-            id: 0,
-            name: "True Thrust".into(),
-            ..Default::default()
-        },
-    );
-    actor.actions.insert(
-        1,
-        actor::Action {
-            id: 1,
-            name: "Life Surge".into(),
-            recast_duration: 45 * 1000,
-            ogcd: true,
-            ..Default::default()
-        },
-    );
-    actor.rotation.push(actor::RotationEntry { action_id: 1 });
-    actor.rotation.push(actor::RotationEntry { action_id: 0 });
-    commands.spawn().insert(actor).id();
+    // TODO: do I need this any more?
+    let actor = Actor::default();
+    let mut actions = Actions::default();
+    actions.add(actor::Action {
+        id: 0,
+        name: "True Thrust".into(),
+        ..Default::default()
+    });
+    actions.add(actor::Action {
+        id: 1,
+        name: "Life Surge".into(),
+        recast_duration: 45 * 1000,
+        ogcd: true,
+        ..Default::default()
+    });
+
+    let mut rotation = Rotation::default();
+    rotation.add(RotationEntry { action_id: 1 });
+    rotation.add(RotationEntry { action_id: 0 });
+
     commands
         .spawn()
-        .insert((Actor::default(), Target::default()));
+        .insert((actor, rotation, actions, RecastExpirations::default()));
+    commands
+        .spawn()
+        .insert((Target::default(), Actor::default(), Damage::default()));
 }
 
 fn tick(
-    mut sim_query: Query<&mut Sim>,
+    mut sim_state_query: Query<&mut SimState>,
     mut target_query: Query<(Entity, &mut Actor, &Target)>,
-    mut actor_query: Query<(Entity, &mut Actor)>,
+    mut actor_query: Query<(Entity, &mut Actor, &Rotation, &RecastExpirations)>,
 ) {
-    let mut sim = sim_query
+    let mut sim_state = sim_state_query
         .single_mut()
-        .expect("There should always be exactly one simulation.");
+        .expect("There should always be exactly one sim state.");
     let (_, mut target_actor, _) = target_query
         .single_mut()
         .expect("There should only be one target (for now).");
 
-    sim.tick();
-    for (_entity, actor) in actor_query.iter_mut() {
-        match actor.get_next_action(sim.milliseconds()) {
-            Some(action) => {
-                action.apply(&actor, &mut target_actor);
-            }
-            None => println!("zzz"),
-        }
+    sim_state.tick();
+    for (_entity, actor, rotation, recast_expirations) in actor_query.iter_mut() {
+        rotation.get_next_action_id(sim_state.milliseconds(), &recast_expirations);
     }
 }
 

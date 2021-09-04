@@ -1,17 +1,29 @@
-use super::appliable::Appliable;
+use super::apply::Apply;
 use super::Actor;
+use crate::sim::SimState;
 use crate::sim::SimTime;
+use std::collections::HashMap;
+
+#[derive(Default)]
+pub struct Actions(HashMap<u32, Action>);
+
+impl Actions {
+    pub fn add(&mut self, action: Action) {
+        self.0.insert(action.id, action);
+    }
+}
 
 #[derive(Default)]
 pub struct Action {
     pub id: u32,
     pub name: String,
+    pub target_self: bool,
     pub ogcd: bool,
     // recast_duration is the duration of time in ms till the action can be performed again.
     pub recast_duration: SimTime,
     // recast_expiration is the simulation time after which this action may be performed again.
     pub recast_expiration: SimTime,
-    pub effects: Vec<Box<dyn Appliable + Send + Sync>>,
+    pub results: Vec<Box<dyn Apply + Send + Sync>>,
 }
 
 impl Action {
@@ -23,12 +35,14 @@ impl Action {
     pub fn start_recast(&mut self, sim_time: SimTime) {
         self.recast_expiration = sim_time + self.recast_duration;
     }
-}
 
-impl Appliable for Action {
-    fn apply(&self, source: &Actor, target: &mut Actor) {
-        for effect in &self.effects {
-            effect.apply(source, target);
+    pub fn perform(&self, sim_state: &SimState, source: &mut Actor, target: &mut Actor) {
+        for result in &self.results {
+            if self.target_self {
+                result.apply(sim_state, source);
+            } else {
+                result.apply(sim_state, target);
+            }
         }
     }
 }
@@ -36,7 +50,7 @@ impl Appliable for Action {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::actor::appliable::{Appliable, DoDamage};
+    use crate::actor::apply::{Apply, DoDamage};
 
     #[derive(Default)]
     struct TestReadyData {
@@ -115,29 +129,4 @@ mod tests {
         },
         true
     );
-
-    #[test]
-    fn do_damage() -> std::result::Result<(), String> {
-        let action = Action {
-            id: 1,
-            effects: vec![Box::new(DoDamage { potency: 100 })],
-            ..Default::default()
-        };
-        let mut source = Actor::default();
-        let mut target = Actor::default();
-        action.apply(&mut source, &mut target);
-        assert_eq!(100, target.damage);
-        Ok(())
-    }
-
-    #[test]
-    fn start_recast() {
-        let mut action = Action {
-            id: 1,
-            recast_duration: 10000,
-            ..Default::default()
-        };
-        action.start_recast(10);
-        assert_eq!(10010, action.recast_expiration);
-    }
 }
