@@ -6,8 +6,7 @@ pub struct RecastExpirations(HashMap<u32, SimTime>);
 
 impl RecastExpirations {
     pub fn check_ready(&self, action_id: u32, sim_time: SimTime) -> bool {
-        let RecastExpirations(timers) = self;
-        match timers.get(&action_id) {
+        match self.0.get(&action_id) {
             Some(expiration) => *expiration <= sim_time,
             None => true,
         }

@@ -1,6 +1,5 @@
-use super::stat::Stat;
-use super::{Actor, Apply};
-use crate::sim::{SimState, SimTime};
+use super::Apply;
+use crate::sim::SimTime;
 use std::sync::Arc;
 
 // TODO: Maybe a time ordered heap would be faster. Benchmark when we have more functionality.

@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-
+#[allow(dead_code)]
 #[derive(PartialEq, Eq, Hash, Copy, Clone)]
 pub enum Stat {
     // primary

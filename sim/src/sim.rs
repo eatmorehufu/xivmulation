@@ -9,11 +9,8 @@ pub struct SimState {
 }
 
 impl SimState {
-    pub fn tick(&mut self) {
+    pub fn tick(&mut self) -> SimTime {
         self.milliseconds += MS_PER_TICK;
-    }
-
-    pub fn milliseconds(&self) -> SimTime {
         self.milliseconds
     }
 }

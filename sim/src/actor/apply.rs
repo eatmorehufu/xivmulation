@@ -1,41 +1,43 @@
-use super::Actor;
-use super::{Status, StatusEffect};
-use crate::sim::{SimState, SimTime};
+use super::QueryActor;
+use crate::sim::SimTime;
+use bevy_ecs::prelude::Entity;
 
 pub trait Apply {
-    fn apply(&self, sim_state: &SimState, target: &mut Actor);
+    fn apply(&self, sim_time: SimTime, query: &mut QueryActor, source: Entity, target: Entity);
 }
 
 pub struct DoDamage {
-    pub potency: u64,
+    pub potency: u32,
 }
 
 impl Apply for DoDamage {
-    fn apply(&self, sim_state: &SimState, target: &mut Actor) {}
-}
-
-pub struct StartGcd {
-    start_time: SimTime,
-}
-
-impl Apply for StartGcd {
-    fn apply(&self, sim_state: &SimState, target: &mut Actor) {}
+    fn apply(&self, _sim_time: SimTime, query: &mut QueryActor, _source: Entity, target: Entity) {
+        if let Ok((_, _, _, _, _, mut damage)) = query.get_mut(target) {
+            damage.add(self.potency);
+        } else {
+            println!("Tried to do damage to a target that has no Damage component.")
+        }
+    }
 }
 
 pub struct StartRecast {
-    start_time: SimTime,
-    action_id: u32,
+    pub action_id: u32,
+    pub duration: SimTime,
 }
 
 impl Apply for StartRecast {
-    fn apply(&self, sim_state: &SimState, target: &mut Actor) {}
+    fn apply(&self, sim_time: SimTime, query: &mut QueryActor, source: Entity, _target: Entity) {
+        if let Ok((_, _, _, _, mut recast_expirations, _)) = query.get_mut(source) {
+            recast_expirations.set(self.action_id, sim_time + self.duration);
+        }
+    }
 }
 
-pub struct GiveStatusEffect {
-    start_time: SimTime,
-    status: Status,
-}
+pub struct GiveStatusEffect {}
 
 impl Apply for GiveStatusEffect {
-    fn apply(&self, sim_state: &SimState, target: &mut Actor) {}
+    fn apply(&self, _sim_time: SimTime, _query: &mut QueryActor, _source: Entity, _target: Entity) {
+        // TODO: implement
+        println!("Buff applied");
+    }
 }

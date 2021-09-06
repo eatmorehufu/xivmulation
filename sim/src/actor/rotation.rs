@@ -17,12 +17,11 @@ impl Rotation {
     pub fn get_next_action_id(
         &self,
         sim_time: SimTime,
-        recast_timers: &RecastExpirations,
+        recast_expirations: &RecastExpirations,
     ) -> Option<u32> {
-        let Rotation(rotation) = self;
-        for entry in rotation {
+        for entry in &self.0 {
             // TODO: Check conditions, eg. buffs/combos/etc. recast_timers probably becomes cast_validator or some such
-            if recast_timers.check_ready(entry.action_id, sim_time) {
+            if recast_expirations.check_ready(entry.action_id, sim_time) {
                 return Some(entry.action_id);
             }
         }
