@@ -1,77 +1,109 @@
 mod actor;
 mod sim;
 
-use actor::{Actor, Appliable, Target};
+use actor::action::{Action, Actions};
+use actor::apply::{DoDamage, GiveStatusEffect, StartRecast};
+use actor::damage::Damage;
+use actor::recast_expirations::RecastExpirations;
+use actor::rotation::{Rotation, RotationEntry};
+use actor::{Actor, ActorBundle, QueryActor, Target};
 use bevy_app::{App, ScheduleRunnerPlugin, ScheduleRunnerSettings};
 use bevy_ecs::prelude::*;
 use bevy_utils::Duration;
-use sim::SimTime;
-
-const TICKS_PER_SECOND: SimTime = 20;
-const MS_PER_TICK: SimTime = 1000 / TICKS_PER_SECOND;
-
-struct Sim {
-    milliseconds: SimTime,
-}
-
-impl Sim {
-    pub fn tick(&mut self) {
-        self.milliseconds += MS_PER_TICK;
-    }
-
-    pub fn milliseconds(&self) -> SimTime {
-        self.milliseconds
-    }
-}
+use sim::SimState;
+use std::sync::Arc;
 
 fn setup(mut commands: Commands) {
-    let mut actor = Actor::default();
-    actor.actions.insert(
-        0,
-        actor::Action {
-            id: 0,
-            name: "True Thrust".into(),
-            ..Default::default()
-        },
-    );
-    actor.actions.insert(
-        1,
-        actor::Action {
-            id: 1,
-            name: "Life Surge".into(),
-            recast_duration: 45 * 1000,
-            ogcd: true,
-            ..Default::default()
-        },
-    );
-    actor.rotation.push(actor::RotationEntry { action_id: 1 });
-    actor.rotation.push(actor::RotationEntry { action_id: 0 });
-    commands.spawn().insert(actor).id();
-    commands
-        .spawn()
-        .insert((Actor::default(), Target::default()));
+    let mut actions = Actions::default();
+    actions.add(actor::Action {
+        id: 0,
+        name: "Life Surge".into(),
+        ogcd: true,
+        results: vec![
+            Arc::new(GiveStatusEffect {}),
+            Arc::new(StartRecast {
+                // TODO: maybe id can be inferred
+                action_id: 0,
+                duration: 1000,
+            }),
+        ],
+        ..Default::default()
+    });
+    actions.add(actor::Action {
+        id: 1,
+        name: "True Thrust".into(),
+        results: vec![Arc::new(DoDamage { potency: 1000 })],
+        ..Default::default()
+    });
+
+    let mut rotation = Rotation::default();
+    // NEXT: put life surge on CD and ensure we perform the whole rotation.
+    rotation.add(RotationEntry { action_id: 0 });
+    rotation.add(RotationEntry { action_id: 1 });
+
+    commands.spawn().insert(SimState::default());
+    commands.spawn_bundle((
+        Actor::default(),
+        actions,
+        rotation,
+        RecastExpirations::default(),
+        Damage::default(),
+    ));
+    commands.spawn_bundle((
+        Target::default(),
+        Actor::default(),
+        Actions::default(),
+        Rotation::default(),
+        RecastExpirations::default(),
+        Damage::default(),
+    ));
+}
+
+struct PerformBundle {
+    action: Action,
+    source_entity: Entity,
+    target_entity: Entity,
 }
 
 fn tick(
-    mut sim_query: Query<&mut Sim>,
-    mut target_query: Query<(Entity, &mut Actor, &Target)>,
-    mut actor_query: Query<(Entity, &mut Actor)>,
+    mut sim_state_query: Query<&mut SimState>,
+    mut actor_queries: QuerySet<(Query<ActorBundle, With<Target>>, QueryActor)>,
 ) {
-    let mut sim = sim_query
+    let mut sim_state = sim_state_query
         .single_mut()
-        .expect("There should always be exactly one simulation.");
-    let (_, mut target_actor, _) = target_query
-        .single_mut()
-        .expect("There should only be one target (for now).");
+        .expect("There should always be exactly one sim state.");
 
-    sim.tick();
-    for (_entity, actor) in actor_query.iter_mut() {
-        match actor.get_next_action(sim.milliseconds()) {
-            Some(action) => {
-                action.apply(&actor, &mut target_actor);
-            }
-            None => println!("zzz"),
-        }
+    let sim_time = sim_state.tick();
+
+    let (temp_target_entity, _, _, _, _, _) = actor_queries
+        .q0_mut()
+        .single_mut()
+        .expect("There should always be exactly one sim state.");
+    let target_entity = temp_target_entity.clone();
+
+    let mut actor_query = actor_queries.q1_mut();
+    let mut perform_bundles = Vec::<PerformBundle>::default();
+    for (entity, _, actions, rotation, recast_expirations, _) in actor_query.iter_mut() {
+        match rotation.get_next_action_id(sim_time, &recast_expirations) {
+            Some(action_id) => match actions.get(&action_id) {
+                Some(action) => perform_bundles.push(PerformBundle {
+                    action: action.clone(),
+                    source_entity: entity,
+                    target_entity: target_entity,
+                }),
+                None => (),
+            },
+            None => (),
+        };
+    }
+
+    for bundle in perform_bundles {
+        bundle.action.perform(
+            sim_time,
+            &mut actor_query,
+            bundle.source_entity,
+            bundle.target_entity,
+        );
     }
 }
 
