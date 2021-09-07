@@ -7,13 +7,12 @@ pub mod rotation;
 pub mod stat;
 pub mod status_effect;
 pub use action::{Action, Actions};
-pub use apply::Apply;
+use apply::Apply;
 use bevy_ecs::prelude::{Entity, Query};
-pub use damage::Damage;
-pub use recast_expirations::RecastExpirations;
-pub use rotation::Rotation;
-pub use stat::Stat;
-pub use status_effect::{Status, StatusEffect};
+use damage::Damage;
+use recast_expirations::RecastExpirations;
+use rotation::Rotation;
+use status_effect::StatusEffects;
 
 pub type ActorBundle = (
     Entity,
@@ -22,6 +21,7 @@ pub type ActorBundle = (
     &'static Rotation,
     &'static mut RecastExpirations,
     &'static mut Damage,
+    &'static mut StatusEffects,
 );
 
 pub type QueryActor<'a> = Query<'a, ActorBundle>;
