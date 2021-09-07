@@ -1,5 +1,8 @@
+use super::stat::Stat;
 use super::Apply;
+use super::QueryActor;
 use crate::sim::SimTime;
+use bevy_ecs::prelude::Entity;
 use std::sync::Arc;
 
 // TODO: Maybe a time ordered heap would be faster. Benchmark when we have more functionality.
@@ -16,7 +19,7 @@ impl StatusEffects {
     }
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 // Represents an applied status with an expiration
 pub struct StatusEffect {
     // expiration is the simulation timestamp when this status effect should be removed.
@@ -37,6 +40,17 @@ impl StatusEffect {
 pub struct Status {
     pub duration: SimTime,
     pub effects: Vec<Arc<dyn Apply + Send + Sync>>,
+}
+
+pub struct ModifyStat {
+    pub stat: Stat,
+    pub amount: u32,
+}
+
+impl Apply for ModifyStat {
+    fn apply(&self, _sim_time: SimTime, query: &mut QueryActor, _source: Entity, target: Entity) {
+        if let Ok((_, _, _, _, _, _, _)) = query.get_mut(target) {}
+    }
 }
 
 #[cfg(test)]

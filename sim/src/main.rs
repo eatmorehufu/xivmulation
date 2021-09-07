@@ -6,6 +6,8 @@ use actor::apply::{DoDamage, GiveStatusEffect, StartRecast};
 use actor::damage::Damage;
 use actor::recast_expirations::RecastExpirations;
 use actor::rotation::{Rotation, RotationEntry};
+use actor::stat::Stat;
+use actor::status_effect::{ModifyStat, Status};
 use actor::{Actor, ActorBundle, QueryActor, Target};
 use bevy_app::{App, ScheduleRunnerPlugin, ScheduleRunnerSettings};
 use bevy_ecs::prelude::*;
@@ -20,7 +22,16 @@ fn setup(mut commands: Commands) {
         name: "Life Surge".into(),
         ogcd: true,
         results: vec![
-            Arc::new(GiveStatusEffect {}),
+            Arc::new(GiveStatusEffect {
+                status: Status {
+                    duration: 10000,
+                    effects: vec![Arc::new(ModifyStat {
+                        stat: Stat::CriticalHit,
+                        amount: 100, // TODO: figure out real math
+                    })],
+                },
+                target_source: true,
+            }),
             Arc::new(StartRecast {
                 // TODO: maybe id can be inferred
                 action_id: 0,
@@ -75,7 +86,7 @@ fn tick(
 
     let sim_time = sim_state.tick();
 
-    let (temp_target_entity, _, _, _, _, _) = actor_queries
+    let (temp_target_entity, _, _, _, _, _, _) = actor_queries
         .q0_mut()
         .single_mut()
         .expect("There should always be exactly one sim state.");
@@ -83,7 +94,7 @@ fn tick(
 
     let mut actor_query = actor_queries.q1_mut();
     let mut perform_bundles = Vec::<PerformBundle>::default();
-    for (entity, _, actions, rotation, recast_expirations, _) in actor_query.iter_mut() {
+    for (entity, _, actions, rotation, recast_expirations, _, _) in actor_query.iter_mut() {
         match rotation.get_next_action_id(sim_time, &recast_expirations) {
             Some(action_id) => match actions.get(&action_id) {
                 Some(action) => perform_bundles.push(PerformBundle {
