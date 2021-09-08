@@ -1,14 +1,20 @@
 use yew::prelude::*;
+use yew_router::{route::Route, switch::Permissive};
 
-enum Msg {
-    AddOne,
+mod pages;
+use pages::{
+    about::About, home::Home, page_not_found::PageNotFound,
+};
+mod switch;
+use switch::{AppAnchor, AppRoute, AppRouter, PublicUrlSwitch};
+
+pub enum Msg {
+    ToggleNavbar,
 }
 
-struct Model {
-    // `ComponentLink` is like a reference to a component.
-    // It can be used to send messages to the component
+pub struct Model {
     link: ComponentLink<Self>,
-    value: i64,
+    navbar_active: bool,
 }
 
 impl Component for Model {
@@ -18,34 +24,100 @@ impl Component for Model {
     fn create(_props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
-            value: 0,
+            navbar_active: false,
         }
     }
-
+   
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::AddOne => {
-                self.value += 1;
-                // the value has changed so we need to
-                // re-render for it to appear on the page
+            Msg::ToggleNavbar => {
+                self.navbar_active = !self.navbar_active;
                 true
             }
         }
     }
 
     fn change(&mut self, _props: Self::Properties) -> ShouldRender {
-        // Should only return "true" if new properties are different to
-        // previously received properties.
-        // This component has no properties so we will always return "false".
         false
     }
 
     fn view(&self) -> Html {
         html! {
-            <div>
-                <button onclick=self.link.callback(|_| Msg::AddOne)>{ "+1" }</button>
-                <p>{ self.value }</p>
-            </div>
+            <>
+                { self.view_nav() }
+
+                <main>
+                    <AppRouter
+                        render=AppRouter::render(Self::switch)
+                        redirect=AppRouter::redirect(|route: Route| {
+                            AppRoute::PageNotFound(Permissive(Some(route.route))).into_public()
+                        })
+                    />
+                </main>
+                <footer class="footer">
+                    <div class="content has-text-centered">
+                        { "Powered by " }
+                        <a href="https://yew.rs">{ "Yew" }</a>
+                    </div>
+                </footer>
+            </>
+        }
+    }
+}
+impl Model {
+    fn view_nav(&self) -> Html {
+        let Self {
+            ref link,
+            navbar_active,
+            ..
+        } = *self;
+
+        let active_class = if navbar_active { "is-active" } else { "" };
+
+        html! {
+            <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    <a role="button"
+                        class=classes!("navbar-burger", "burger", active_class)
+                        aria-label="menu" aria-expanded="false"
+                        onclick=link.callback(|_| Msg::ToggleNavbar)
+                    >
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                <div class=classes!("navbar-menu", active_class)>
+                    <div class="navbar-start">
+                        <AppAnchor classes="navbar-item" route=AppRoute::Home>
+                            { "Home" }
+                        </AppAnchor>
+                        <AppAnchor classes="navbar-item" route=AppRoute::About>
+                            { "About" }
+                        </AppAnchor>
+
+                        <div class="navbar-item has-dropdown is-hoverable">
+                            <a class="navbar-link">
+                                { "More" }
+                            </a>                      
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        }
+    }
+
+    fn switch(switch: PublicUrlSwitch) -> Html {
+        match switch.route() {
+            AppRoute::About => {
+                html! { <About /> }
+            }
+            AppRoute::Home => {
+                html! { <Home /> }
+            }
+            AppRoute::PageNotFound(Permissive(route)) => {
+                html! { <PageNotFound route=route /> }
+            }
         }
     }
 }
