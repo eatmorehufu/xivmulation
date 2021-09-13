@@ -3,7 +3,7 @@ use yew_router::{route::Route, switch::Permissive};
 
 mod pages;
 use pages::{
-    about::About, home::Home, page_not_found::PageNotFound,
+    about::About, home::Home, page_not_found::PageNotFound, job::Job,
 };
 mod switch;
 use switch::{AppAnchor, AppRoute, AppRouter, PublicUrlSwitch};
@@ -95,12 +95,6 @@ impl Model {
                         <AppAnchor classes="navbar-item" route=AppRoute::About>
                             { "About" }
                         </AppAnchor>
-
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link">
-                                { "More" }
-                            </a>                      
-                        </div>
                     </div>
                 </div>
             </nav>
@@ -114,6 +108,9 @@ impl Model {
             }
             AppRoute::Home => {
                 html! { <Home /> }
+            }
+            AppRoute::Job(job) => {
+                html! { <Job job = job /> }
             }
             AppRoute::PageNotFound(Permissive(route)) => {
                 html! { <PageNotFound route=route /> }
