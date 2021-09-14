@@ -1,8 +1,8 @@
 #[derive(Default)]
-pub struct Damage(u32);
+pub struct Damage(i32);
 
 impl Damage {
-    pub fn add(&mut self, amount: u32) {
+    pub fn add(&mut self, amount: i32) {
         self.0 += amount;
     }
 }

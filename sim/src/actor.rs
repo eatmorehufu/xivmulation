@@ -1,6 +1,7 @@
 // TODO: don't pub use any more. Let others import the mod qualified path
 pub mod action;
 pub mod apply;
+pub mod calc;
 pub mod damage;
 pub mod recast_expirations;
 pub mod rotation;
@@ -12,6 +13,7 @@ use bevy_ecs::prelude::{Entity, Query};
 use damage::Damage;
 use recast_expirations::RecastExpirations;
 use rotation::Rotation;
+use stat::Stats;
 use status_effect::StatusEffects;
 
 pub type ActorBundle = (
@@ -22,6 +24,7 @@ pub type ActorBundle = (
     &'static mut RecastExpirations,
     &'static mut Damage,
     &'static mut StatusEffects,
+    &'static mut Stats,
 );
 
 pub type QueryActor<'a> = Query<'a, ActorBundle>;
