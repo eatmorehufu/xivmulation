@@ -1,6 +1,6 @@
 use super::apply::Apply;
 use super::QueryActor;
-use crate::sim::SimTime;
+use crate::sim::{SimState, SimTime};
 use bevy_ecs::prelude::Entity;
 use delegate::delegate;
 use std::collections::HashMap;
@@ -33,18 +33,12 @@ pub struct Action {
 }
 
 impl Action {
-    pub fn perform(
-        &self,
-        sim_time: SimTime,
-        query: &mut QueryActor,
-        source: Entity,
-        target: Entity,
-    ) {
+    pub fn perform(&self, sim: &SimState, query: &mut QueryActor, source: Entity, target: Entity) {
         for result in &self.results {
             if self.target_self {
-                result.apply(sim_time, query, source, source);
+                result.apply(sim, query, source, source);
             } else {
-                result.apply(sim_time, query, source, target);
+                result.apply(sim, query, source, target);
             }
         }
     }

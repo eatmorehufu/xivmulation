@@ -1,7 +1,7 @@
 use super::stat::Stat;
 use super::Apply;
 use super::QueryActor;
-use crate::sim::SimTime;
+use crate::sim::{SimState, SimTime};
 use bevy_ecs::prelude::Entity;
 use delegate::delegate;
 use std::sync::Arc;
@@ -58,9 +58,9 @@ impl StatusEffect {
 }
 
 impl Apply for StatusEffect {
-    fn apply(&self, sim_time: SimTime, query: &mut QueryActor, source: Entity, target: Entity) {
+    fn apply(&self, sim: &SimState, query: &mut QueryActor, source: Entity, target: Entity) {
         for effect in &self.status.effects {
-            effect.apply(sim_time, query, source, target);
+            effect.apply(sim, query, source, target);
         }
     }
 }
@@ -87,8 +87,8 @@ pub struct ModifyStat {
 }
 
 impl Apply for ModifyStat {
-    fn apply(&self, _sim_time: SimTime, query: &mut QueryActor, _source: Entity, target: Entity) {
-        if let Ok((_, _, _, _, _, _, _, mut stats)) = query.get_mut(target) {
+    fn apply(&self, _sim: &SimState, query: &mut QueryActor, _source: Entity, target: Entity) {
+        if let Ok((_, _, _, _, _, _, _, _, mut stats)) = query.get_mut(target) {
             stats.add(self.stat, self.amount);
         }
     }

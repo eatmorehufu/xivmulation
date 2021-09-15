@@ -1,3 +1,5 @@
+use rand::{random, Rng};
+
 pub type SimTime = u64;
 
 pub const TICKS_PER_SECOND: SimTime = 1;
@@ -16,5 +18,13 @@ impl SimState {
 
     pub fn now(&self) -> SimTime {
         self.milliseconds
+    }
+
+    pub fn random(&self) -> f32 {
+        random::<f32>()
+    }
+
+    pub fn random_from_range(&self, low_inclusive: i32, high_exclusive: i32) -> i32 {
+        rand::thread_rng().gen_range(low_inclusive..high_exclusive)
     }
 }

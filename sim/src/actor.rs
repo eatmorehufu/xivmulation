@@ -10,6 +10,7 @@ pub mod status_effect;
 pub use action::{Action, Actions};
 use apply::Apply;
 use bevy_ecs::prelude::{Entity, Query};
+use calc::lookup::Job;
 use damage::Damage;
 use recast_expirations::RecastExpirations;
 use rotation::Rotation;
@@ -19,6 +20,7 @@ use status_effect::StatusEffects;
 pub type ActorBundle = (
     Entity,
     &'static Actor,
+    &'static Job,
     &'static Actions,
     &'static Rotation,
     &'static mut RecastExpirations,
