@@ -1,5 +1,6 @@
 pub mod lookup;
 use super::stat::{Stat, Stats};
+use crate::math;
 use crate::sim::SimState;
 
 #[allow(dead_code)]
@@ -22,7 +23,7 @@ pub fn direct_damage(
         AttackType::PHYSICAL => stats.get(Stat::PhysicalWeaponDamage),
         AttackType::MAGIC => stats.get(Stat::MagicWeaponDamage),
     };
-    let traitt = 48; // Assume level 80, static +48
+    let primary_stat_trait = 48; // Assume level 80, static +48
 
     let crit = critical_hit(sim, stats.get(Stat::CriticalHitRate));
     let dh = direct_hit(sim, stats.get(Stat::DirectHitRate));
@@ -37,7 +38,7 @@ pub fn direct_damage(
     // D2 = ⌊ D1 × f(TNC) ⌋ /1000 ⌋ × f(WD) ⌋ /100 ⌋ × Trait ⌋ /100 ⌋
     let d2 = (((((d1 * tenacity(stats.get(Stat::Tenacity))) / 1000) * weapon_damage(job, wd))
         / 100)
-        * traitt)
+        * primary_stat_trait)
         / 100;
     // D3 = ⌊ D2 × CRIT? ⌋ /1000 ⌋ × DH? ⌋ /100 ⌋
     let d3 = (((d2 * crit) / 1000) * dh) / 100;
@@ -45,9 +46,9 @@ pub fn direct_damage(
     let d = d3 * sim.random_from_range(95, 106) / 100;
 
     // TODO: make sure int to float conversions aren't causing problems.
-    multipliers
-        .iter()
-        .fold(d as f32, |total, multiplier| total * *multiplier) as i32
+    multipliers.iter().fold(d as f32, |total, multiplier| {
+        math::round::floor(total * *multiplier)
+    }) as i32
 }
 
 // Level 80 F(AP)
