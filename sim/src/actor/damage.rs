@@ -4,6 +4,7 @@ pub struct Damage(i32);
 impl Damage {
     pub fn add(&mut self, amount: i32) {
         self.0 += amount;
+        println!("Total Damage: {}", self.0);
     }
 }
 

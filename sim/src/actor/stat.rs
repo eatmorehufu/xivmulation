@@ -9,16 +9,24 @@ pub enum Stat {
     Intelligence,
     Mind,
     // offensive
-    CriticalHit,
+    CriticalHitRate,
     Determination,
-    DirectHit,
+    DirectHitRate,
     // defensive
     Defense,
     MagicDefense,
-    // other
+    // physical properties
+    AttackPower,
     SkillSpeed,
+    // mental properties
+    AttackMagicPotency,
+    HealingMagicPotency,
+    // role
     Piety,
     Tenacity,
+    // other
+    PhysicalWeaponDamage,
+    MagicWeaponDamage,
 }
 
 #[derive(Default)]

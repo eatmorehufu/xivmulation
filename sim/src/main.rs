@@ -4,6 +4,8 @@ mod sim;
 use actor::action::{Action, Actions};
 use actor::apply::Apply;
 use actor::apply::{DoDamage, GiveStatusEffect, StartRecast};
+use actor::calc::lookup::Job;
+use actor::calc::AttackType;
 use actor::damage::Damage;
 use actor::recast_expirations::RecastExpirations;
 use actor::rotation::{Rotation, RotationEntry};
@@ -28,7 +30,7 @@ fn setup(mut commands: Commands) {
                     name: "Life Surge".into(),
                     duration: 10000,
                     effects: vec![Arc::new(ModifyStat {
-                        stat: Stat::CriticalHit,
+                        stat: Stat::CriticalHitRate,
                         amount: 100, // TODO: figure out real math
                     })],
                 },
@@ -37,7 +39,7 @@ fn setup(mut commands: Commands) {
             Arc::new(StartRecast {
                 // TODO: maybe id can be inferred
                 action_id: 0,
-                duration: 1000,
+                duration: 45000,
             }),
         ],
         ..Default::default()
@@ -45,7 +47,10 @@ fn setup(mut commands: Commands) {
     actions.add(actor::Action {
         id: 1,
         name: "True Thrust".into(),
-        results: vec![Arc::new(DoDamage { potency: 1000 })],
+        results: vec![Arc::new(DoDamage {
+            potency: 1000,
+            attack_type: AttackType::PHYSICAL,
+        })],
         ..Default::default()
     });
 
@@ -57,6 +62,7 @@ fn setup(mut commands: Commands) {
     commands.spawn().insert(SimState::default());
     commands.spawn_bundle((
         Actor::default(),
+        Job::DRG,
         actions,
         rotation,
         RecastExpirations::default(),
@@ -67,6 +73,7 @@ fn setup(mut commands: Commands) {
     commands.spawn_bundle((
         Target::default(),
         Actor::default(),
+        Job::None,
         Actions::default(),
         Rotation::default(),
         RecastExpirations::default(),
@@ -111,13 +118,12 @@ struct StatusEffectApplyBundle {
     target: Entity,
 }
 fn process_status_effects(sim_state_query: Query<&SimState>, mut actor_query: QueryActor) {
-    let sim_state = sim_state_query
+    let sim = sim_state_query
         .single()
         .expect("There should always be exactly one sim state.");
-    let sim_time = sim_state.now();
 
     let mut bundles = Vec::<StatusEffectApplyBundle>::default();
-    for (entity, _, _, _, _, _, status_effects, _) in actor_query.iter_mut() {
+    for (entity, _, _, _, _, _, _, status_effects, _) in actor_query.iter_mut() {
         println!("{} status effects", status_effects.len());
         for effect in status_effects.iter() {
             bundles.push(StatusEffectApplyBundle {
@@ -134,7 +140,7 @@ fn process_status_effects(sim_state_query: Query<&SimState>, mut actor_query: Qu
         );
         bundle
             .status_effect
-            .apply(sim_time, &mut actor_query, bundle.source, bundle.target);
+            .apply(sim, &mut actor_query, bundle.source, bundle.target);
     }
 }
 
@@ -147,12 +153,12 @@ fn perform_actions(
     sim_state_query: Query<&SimState>,
     mut actor_queries: QuerySet<(Query<ActorBundle, With<Target>>, QueryActor)>,
 ) {
-    let sim_state = sim_state_query
+    let sim = sim_state_query
         .single()
         .expect("There should always be exactly one sim state.");
-    let sim_time = sim_state.now();
+    let sim_time = sim.now();
 
-    let (temp_target_entity, _, _, _, _, _, _, _) = actor_queries
+    let (temp_target_entity, _, _, _, _, _, _, _, _) = actor_queries
         .q0_mut()
         .single_mut()
         .expect("There should always be exactly one sim state.");
@@ -160,7 +166,7 @@ fn perform_actions(
 
     let mut actor_query = actor_queries.q1_mut();
     let mut perform_bundles = Vec::<ActionPerformBundle>::default();
-    for (entity, _, actions, rotation, recast_expirations, _, _, _) in actor_query.iter_mut() {
+    for (entity, _, _, actions, rotation, recast_expirations, _, _, _) in actor_query.iter_mut() {
         match rotation.get_next_action_id(sim_time, &recast_expirations) {
             Some(action_id) => match actions.get(&action_id) {
                 Some(action) => perform_bundles.push(ActionPerformBundle {
@@ -176,7 +182,7 @@ fn perform_actions(
 
     for bundle in perform_bundles {
         bundle.action.perform(
-            sim_time,
+            sim,
             &mut actor_query,
             bundle.source_entity,
             bundle.target_entity,
