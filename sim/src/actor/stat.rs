@@ -21,6 +21,7 @@ pub enum Stat {
     // mental properties
     AttackMagicPotency,
     HealingMagicPotency,
+    SpellSpeed,
     // role
     Piety,
     Tenacity,
@@ -65,35 +66,35 @@ mod tests {
     #[test]
     fn get() {
         let mut stats = Stats::default();
-        stats.add(Stat::CriticalHit, 10);
-        assert_eq!(10, stats.get(Stat::CriticalHit));
-        stats.set_base(Stat::CriticalHit, 5);
-        assert_eq!(15, stats.get(Stat::CriticalHit));
+        stats.add(Stat::CriticalHitRate, 10);
+        assert_eq!(10, stats.get(Stat::CriticalHitRate));
+        stats.set_base(Stat::CriticalHitRate, 5);
+        assert_eq!(15, stats.get(Stat::CriticalHitRate));
     }
 
     #[test]
     fn add() {
         let mut stats = Stats::default();
-        stats.add(Stat::CriticalHit, 10);
-        assert_eq!(10, stats.get(Stat::CriticalHit));
+        stats.add(Stat::CriticalHitRate, 10);
+        assert_eq!(10, stats.get(Stat::CriticalHitRate));
     }
 
     #[test]
     fn set_base() {
         let mut stats = Stats::default();
-        stats.set_base(Stat::CriticalHit, 10);
-        assert_eq!(10, stats.base[&Stat::CriticalHit]);
-        assert_eq!(false, stats.delta.contains_key(&Stat::CriticalHit));
-        assert_eq!(10, stats.get(Stat::CriticalHit));
+        stats.set_base(Stat::CriticalHitRate, 10);
+        assert_eq!(10, stats.base[&Stat::CriticalHitRate]);
+        assert_eq!(false, stats.delta.contains_key(&Stat::CriticalHitRate));
+        assert_eq!(10, stats.get(Stat::CriticalHitRate));
     }
 
     #[test]
     fn reset() {
         let mut stats = Stats::default();
-        stats.set_base(Stat::CriticalHit, 10);
-        stats.add(Stat::CriticalHit, 5);
-        assert_eq!(15, stats.get(Stat::CriticalHit));
+        stats.set_base(Stat::CriticalHitRate, 10);
+        stats.add(Stat::CriticalHitRate, 5);
+        assert_eq!(15, stats.get(Stat::CriticalHitRate));
         stats.reset();
-        assert_eq!(10, stats.get(Stat::CriticalHit));
+        assert_eq!(10, stats.get(Stat::CriticalHitRate));
     }
 }

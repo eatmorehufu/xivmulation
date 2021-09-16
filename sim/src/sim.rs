@@ -1,13 +1,49 @@
 use rand::{random, Rng};
+use std::sync::Arc;
 
 pub type SimTime = u64;
 
 pub const TICKS_PER_SECOND: SimTime = 1;
 pub const MS_PER_TICK: SimTime = 1000 / TICKS_PER_SECOND;
 
-#[derive(Default)]
+pub trait SimRng {
+    fn random(&self) -> f64;
+    fn random_from_range(&self, low_inclusive: i32, high_exclusive: i32) -> i32;
+}
+
+struct RealRng {}
+
+impl SimRng for RealRng {
+    fn random(&self) -> f64 {
+        random::<f64>()
+    }
+
+    fn random_from_range(&self, low_inclusive: i32, high_exclusive: i32) -> i32 {
+        rand::thread_rng().gen_range(low_inclusive..high_exclusive)
+    }
+}
+
 pub struct SimState {
     milliseconds: SimTime,
+    pub rng: Arc<dyn SimRng + Sync + Send>,
+}
+
+impl SimState {
+    pub fn new<T: SimRng + Sync + Send + 'static>(rng: T) -> Self {
+        SimState {
+            milliseconds: 0,
+            rng: Arc::<T>::new(rng),
+        }
+    }
+}
+
+impl Default for SimState {
+    fn default() -> Self {
+        SimState {
+            milliseconds: 0,
+            rng: Arc::<RealRng>::new(RealRng {}),
+        }
+    }
 }
 
 impl SimState {
@@ -18,13 +54,5 @@ impl SimState {
 
     pub fn now(&self) -> SimTime {
         self.milliseconds
-    }
-
-    pub fn random(&self) -> f32 {
-        random::<f32>()
-    }
-
-    pub fn random_from_range(&self, low_inclusive: i32, high_exclusive: i32) -> i32 {
-        rand::thread_rng().gen_range(low_inclusive..high_exclusive)
     }
 }

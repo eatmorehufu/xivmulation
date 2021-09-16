@@ -77,10 +77,7 @@ impl Job {
             Job::GLA | Job::MRD | Job::PLD | Job::WAR | Job::DRK | Job::GNB => Attribute::VIT,
             Job::THM | Job::ACN | Job::BLM | Job::SMN | Job::RDM | Job::BLU => Attribute::INT,
             Job::CNJ | Job::WHM | Job::SCH | Job::AST => Attribute::MND,
-            _ => panic!(format!(
-                "Tried to get primary attribute of unknown job: {:?}",
-                self
-            )),
+            _ => panic!("Tried to get primary attribute of unknown job: {:?}", self),
         }
     }
 }
@@ -130,6 +127,6 @@ pub fn job_modifiers(job: Job, attribute: Attribute) -> i32 {
         Job::BLU => job_stat_match!(attribute, 105, 120, 70, 100, 110, 115, 105),
         Job::GNB => job_stat_match!(attribute, 120, 59, 100, 110, 95, 60, 100),
         Job::DNC => job_stat_match!(attribute, 105, 79, 90, 100, 115, 85, 80),
-        _ => panic!(format!("Tried to get base stats of unknown job: {:?}", job)),
+        _ => panic!("Tried to get base stats of unknown job: {:?}", job),
     }
 }
