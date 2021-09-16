@@ -90,13 +90,13 @@ impl Job {
 }
 
 macro_rules! job_stat_match {
-    ($stat:expr, $hp:expr, $mp:expr, $str:expr, $vit:expr, $dex:expr, $int:expr, $mnd:expr) => {
+    ($stat:expr, $hp:expr, $mp:expr, $strength:expr, $vitality:expr, $dexterity:expr, $intelligence:expr, $mind:expr) => {
         match $stat {
-            Stat::Strength => $str,
-            Stat::Vitality => $vit,
-            Stat::Dexterity => $dex,
-            Stat::Intelligence => $int,
-            Stat::Mind => $mnd,
+            Stat::Strength => $strength,
+            Stat::Vitality => $vitality,
+            Stat::Dexterity => $dexterity,
+            Stat::Intelligence => $intelligence,
+            Stat::Mind => $mind,
             _ => 0,
         }
     };
