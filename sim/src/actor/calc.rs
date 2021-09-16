@@ -31,10 +31,8 @@ pub fn direct_damage(
         AttackType::MAGIC => stats.get(Stat::MagicWeaponDamage),
     };
     let fwd = weapon_damage(job, wd);
-    // Assume level 80, static +48
-    let primary_stat_trait = 48;
     // D2 = ⌊ D1 × f(TNC) ⌋ /1000 ⌋ × f(WD) ⌋ /100 ⌋ × Trait ⌋ /100 ⌋
-    let d2 = (((((d1 * ftnc) / 1000) * fwd) / 100) * primary_stat_trait) / 100;
+    let d2 = (((((d1 * ftnc) / 1000) * fwd) / 100) * job.trait_value()) / 100;
 
     let crit = critical_hit(sim, stats.get(Stat::CriticalHitRate));
     let dh = direct_hit(sim, stats.get(Stat::DirectHitRate));
@@ -86,7 +84,7 @@ fn tenacity(tnc: i32) -> i32 {
 fn weapon_damage(job: lookup::Job, wd: i32) -> i32 {
     // ⌊ ( LevelModLv, MAIN · JobModJob, Attribute / 1000 ) + WD ⌋
     (lookup::level_modifiers(lookup::LevelColumn::MAIN)
-        * lookup::job_modifiers(job, job.primary_attribute())
+        * lookup::job_modifiers(job, job.primary_stat())
         / 1000)
         + wd
 }
@@ -264,7 +262,7 @@ mod test {
         let attack_type = AttackType::PHYSICAL;
 
         assert_eq!(
-            6750,
+            6795,
             direct_damage(&sim, potency, job, &stats, attack_type, vec![])
         );
     }
