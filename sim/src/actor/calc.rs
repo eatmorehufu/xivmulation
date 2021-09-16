@@ -1,6 +1,7 @@
 pub mod lookup;
 use super::stat::{Stat, Stats};
 use crate::sim::SimState;
+use math::round::floor;
 
 #[allow(dead_code)]
 #[derive(Debug, Copy, Clone)]
@@ -45,9 +46,9 @@ pub fn direct_damage(
     let d = d3 * sim.rng.random_from_range(95, 106) / 100;
 
     // TODO: make sure int to float conversions aren't causing problems.
-    multipliers.iter().fold(d as f64, |total, multiplier| {
-        math::round::floor(total * *multiplier, 0)
-    }) as i32
+    multipliers
+        .iter()
+        .fold(d as f64, |total, multiplier| floor(total * *multiplier, 0)) as i32
 }
 
 // Level 80 F(AP)
@@ -91,8 +92,7 @@ pub fn weapon_damage(job: lookup::Job, wd: i32) -> i32 {
 // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/parameters/#critical-hit-probability
 fn critical_hit_rate(chr: i32) -> f64 {
     // p(CHR) = ⌊ 200 · ( CHR - LevelModLv, SUB )/ LevelModLv, DIV + 50 ⌋ / 10
-    // TODO: Verify what type of value we're getting from probability and sim.random(). Is it 0.0 - 1.0?
-    math::round::floor(
+    floor(
         200.0 * ((chr - lookup::level_modifiers(lookup::LevelColumn::SUB)) as f64)
             / (lookup::level_modifiers(lookup::LevelColumn::DIV) as f64)
             + 50.0,
@@ -100,10 +100,17 @@ fn critical_hit_rate(chr: i32) -> f64 {
     ) / 10.0
 }
 
-pub fn is_crit(sim: &SimState, chr: i32) -> bool {
+fn is_crit(sim: &SimState, chr: i32) -> bool {
     let roll = sim.rng.random();
     let probability = critical_hit_rate(chr) / 100.0;
     roll < probability
+}
+
+fn critical_hit_damage(crit: i32) -> i32 {
+    // f(CRIT) = ⌊ 200 · ( CRIT - LevelModLv, SUB )/ LevelModLv, DIV + 1400 ⌋
+    200 * (crit - lookup::level_modifiers(lookup::LevelColumn::SUB))
+        / lookup::level_modifiers(lookup::LevelColumn::DIV)
+        + 1400
 }
 
 // F(CRIT)
@@ -112,18 +119,14 @@ pub fn critical_hit(sim: &SimState, crit: i32) -> i32 {
     if !is_crit(sim, crit) {
         return 1000;
     }
-
-    // f(CRIT) = ⌊ 200 · ( CRIT - LevelModLv, SUB )/ LevelModLv, DIV + 1400 ⌋
-    200 * (crit - lookup::level_modifiers(lookup::LevelColumn::SUB))
-        / lookup::level_modifiers(lookup::LevelColumn::DIV)
-        + 1400
+    critical_hit_damage(crit)
 }
 
 // P(DHR)
 // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/parameters/#pdhr
 fn direct_hit_rate(dhr: i32) -> f64 {
     // p(DHR) = ⌊ 550 · ( DHR - LevelModLv, SUB )/ LevelModLv, DIV ⌋ / 10
-    math::round::floor(
+    floor(
         550.0 * (dhr as f64 - (lookup::level_modifiers(lookup::LevelColumn::SUB)) as f64)
             / (lookup::level_modifiers(lookup::LevelColumn::DIV) as f64),
         0,
@@ -175,6 +178,13 @@ mod test {
         assert_eq!(1000, tenacity(380));
         assert_eq!(1079, tenacity(2987));
         assert_eq!(1121, tenacity(4373));
+    }
+
+    #[test]
+    fn test_critical_hit_damage() {
+        assert_eq!(1642, critical_hit_damage(4373));
+        assert_eq!(1485, critical_hit_damage(1783));
+        assert_eq!(1400, critical_hit_damage(380));
     }
 
     /*
