@@ -31,10 +31,11 @@ pub fn direct_damage(
     // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/damage-and-healing/#direct-damage-d
     // D1 = ⌊ Potency × f(ATK) × f(DET) ⌋ /100 ⌋ /1000 ⌋
     let d1 = ((potency
-        * attack_power(stats.get(Stat::AttackPower))
+        * attack_power(job, stats.get(Stat::AttackPower))
         * determination(stats.get(Stat::Determination)))
         / 100)
         / 1000;
+
     // D2 = ⌊ D1 × f(TNC) ⌋ /1000 ⌋ × f(WD) ⌋ /100 ⌋ × Trait ⌋ /100 ⌋
     let d2 = (((((d1 * tenacity(stats.get(Stat::Tenacity))) / 1000) * weapon_damage(job, wd))
         / 100)
@@ -53,14 +54,19 @@ pub fn direct_damage(
 
 // Level 80 F(AP)
 // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#lv-80-fap
-pub fn attack_power(ap: i32) -> i32 {
-    // ⌊ 165 · ( AP - 340 ) / 340 ⌋ + 100
-    (165 * (ap - 340) / 340) + 100
+fn attack_power(job: lookup::Job, ap: i32) -> i32 {
+    if job.is_tank() {
+        // f(AP) = ⌊ 115 · ( AP - 340 ) / 340 ⌋ + 100
+        (115 * (ap - 340) / 340) + 100
+    } else {
+        // f(AP) = ⌊ 165 · ( AP - 340 ) / 340 ⌋ + 100
+        (165 * (ap - 340) / 340) + 100
+    }
 }
 
 // F(DET)
 // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#determination-fdet
-pub fn determination(det: i32) -> i32 {
+fn determination(det: i32) -> i32 {
     // f(DET) = ⌊ 130 · ( DET - LevelMod Lv, Main )/ LevelMod Lv, DIV + 1000 ⌋
     130 * (det - lookup::level_modifiers(lookup::LevelColumn::MAIN))
         / lookup::level_modifiers(lookup::LevelColumn::DIV)
@@ -69,7 +75,7 @@ pub fn determination(det: i32) -> i32 {
 
 // F(TNC)
 // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#tenacity-ftnc
-pub fn tenacity(tnc: i32) -> i32 {
+fn tenacity(tnc: i32) -> i32 {
     // f(TNC) = ⌊ 100 · ( TNC - LevelModLv, SUB )/ LevelModLv, DIV + 1000 ⌋
     100 * (tnc - lookup::level_modifiers(lookup::LevelColumn::SUB))
         / lookup::level_modifiers(lookup::LevelColumn::DIV)
@@ -80,7 +86,7 @@ pub fn tenacity(tnc: i32) -> i32 {
 // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#weapon-damage-fwd
 // Use the WD appropriate for the attack being calculated (eg. Auto-attack = physical damage)
 // All weapons have a Physical and Magical Damage value even though one of them is hidden.
-pub fn weapon_damage(job: lookup::Job, wd: i32) -> i32 {
+fn weapon_damage(job: lookup::Job, wd: i32) -> i32 {
     // f(WD) = ⌊ ( LevelModLv, MAIN · JobModJob, Attribute / 1000 ) + WD ⌋
     (lookup::level_modifiers(lookup::LevelColumn::MAIN)
         * lookup::job_modifiers(job, job.primary_attribute())
@@ -115,7 +121,7 @@ fn critical_hit_damage(crit: i32) -> i32 {
 
 // F(CRIT)
 // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#critical-hit-damage-fcrit
-pub fn critical_hit(sim: &SimState, crit: i32) -> i32 {
+fn critical_hit(sim: &SimState, crit: i32) -> i32 {
     if !is_crit(sim, crit) {
         return 1000;
     }
@@ -133,13 +139,13 @@ fn direct_hit_rate(dhr: i32) -> f64 {
     ) / 10.0
 }
 
-pub fn is_direct(sim: &SimState, dhr: i32) -> bool {
+fn is_direct(sim: &SimState, dhr: i32) -> bool {
     let roll = sim.rng.random();
     let probability = direct_hit_rate(dhr) / 100.0;
     roll < probability
 }
 
-pub fn direct_hit(sim: &SimState, crit: i32) -> i32 {
+fn direct_hit(sim: &SimState, crit: i32) -> i32 {
     if is_direct(sim, crit) {
         125
     } else {
@@ -260,10 +266,9 @@ mod test {
         let job = lookup::Job::PLD;
         let attack_type = AttackType::PHYSICAL;
 
-        // Does not pass.
-        // assert_eq!(
-        //     8000,
-        //     direct_damage(&sim, potency, job, &stats, attack_type, vec![])
-        // );
+        assert_eq!(
+            8000,
+            direct_damage(&sim, potency, job, &stats, attack_type, vec![])
+        );
     }
 }

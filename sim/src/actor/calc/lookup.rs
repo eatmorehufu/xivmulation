@@ -80,6 +80,13 @@ impl Job {
             _ => panic!("Tried to get primary attribute of unknown job: {:?}", self),
         }
     }
+
+    pub fn is_tank(self) -> bool {
+        match self {
+            Job::GLA | Job::MRD | Job::PLD | Job::WAR | Job::DRK | Job::GNB => true,
+            _ => false,
+        }
+    }
 }
 
 macro_rules! job_stat_match {
