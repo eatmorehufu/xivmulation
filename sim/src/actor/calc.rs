@@ -32,7 +32,7 @@ pub fn direct_damage(
     };
     let fwd = weapon_damage(job, wd);
     // D2 = ⌊ D1 × f(TNC) ⌋ /1000 ⌋ × f(WD) ⌋ /100 ⌋ × Trait ⌋ /100 ⌋
-    let d2 = (((((d1 * ftnc) / 1000) * fwd) / 100) * job.trait_value()) / 100;
+    let d2 = (((((d1 * ftnc) / 1000) * fwd) / 100) * job.trait_multiplier()) / 100;
 
     let crit = critical_hit(sim, stats.get(Stat::CriticalHitRate));
     let dh = direct_hit(sim, stats.get(Stat::DirectHitRate));

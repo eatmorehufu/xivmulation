@@ -71,7 +71,7 @@ impl Job {
         }
     }
 
-    pub fn trait_value(&self) -> i32 {
+    pub fn trait_multiplier(&self) -> i32 {
         match self {
             Job::ARC | Job::BRD | Job::MCH | Job::DNC => 120,
             Job::THM | Job::ACN | Job::BLM | Job::SMN | Job::RDM => 130,
