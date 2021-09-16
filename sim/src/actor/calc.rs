@@ -91,7 +91,6 @@ pub fn weapon_damage(job: lookup::Job, wd: i32) -> i32 {
 // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/parameters/#critical-hit-probability
 fn critical_hit_rate(chr: i32) -> f64 {
     // p(CHR) = ⌊ 200 · ( CHR - LevelModLv, SUB )/ LevelModLv, DIV + 50 ⌋ / 10
-    // TODO: Verify what type of value we're getting from probability and sim.random(). Is it 0.0 - 1.0?
     math::round::floor(
         200.0 * ((chr - lookup::level_modifiers(lookup::LevelColumn::SUB)) as f64)
             / (lookup::level_modifiers(lookup::LevelColumn::DIV) as f64)
