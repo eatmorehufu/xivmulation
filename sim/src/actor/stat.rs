@@ -30,10 +30,16 @@ pub enum Stat {
     MagicWeaponDamage,
 }
 
+#[derive(PartialEq, Eq, Hash, Copy, Clone)]
+pub enum SpecialStat {
+    CriticalHitPercentOverride,
+}
+
 #[derive(Default)]
 pub struct Stats {
     delta: HashMap<Stat, i64>,
     base: HashMap<Stat, i64>,
+    special: HashMap<SpecialStat, i64>,
 }
 
 impl Stats {
@@ -52,10 +58,19 @@ impl Stats {
 
     pub fn reset(&mut self) {
         self.delta.clear();
+        self.special.clear();
     }
 
     pub fn set_base(&mut self, stat: Stat, amount: i64) {
         self.base.insert(stat, amount);
+    }
+
+    pub fn set_special(&mut self, stat: SpecialStat, amount: i64) {
+        self.special.insert(stat, amount);
+    }
+
+    pub fn get_special(&self, stat: SpecialStat) -> Option<&i64> {
+        self.special.get(&stat)
     }
 }
 

@@ -9,8 +9,8 @@ use actor::calc::AttackType;
 use actor::damage::Damage;
 use actor::recast_expirations::RecastExpirations;
 use actor::rotation::{Rotation, RotationEntry};
-use actor::stat::{Stat, Stats};
-use actor::status_effect::{ModifyStat, Status, StatusEffect, StatusEffects};
+use actor::stat::{SpecialStat, Stat, Stats};
+use actor::status_effect::{ModifySpecialStat, Status, StatusEffect, StatusEffects};
 use actor::{Actor, ActorBundle, QueryActor, Target};
 use bevy_app::{App, ScheduleRunnerPlugin, ScheduleRunnerSettings};
 use bevy_ecs::prelude::*;
@@ -31,9 +31,9 @@ fn setup(mut commands: Commands) {
                 status: Status {
                     name: "Life Surge".into(),
                     duration: 10000,
-                    effects: vec![Arc::new(ModifyStat {
-                        stat: Stat::CriticalHitRate,
-                        amount: 9999, // TODO: figure out real math
+                    effects: vec![Arc::new(ModifySpecialStat {
+                        stat: SpecialStat::CriticalHitPercentOverride,
+                        amount: 100,
                     })],
                 },
                 target_source: true,

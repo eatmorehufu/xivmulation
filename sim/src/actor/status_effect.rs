@@ -1,4 +1,4 @@
-use super::stat::Stat;
+use super::stat::{SpecialStat, Stat};
 use super::Apply;
 use super::QueryActor;
 use crate::sim::{SimState, SimTime};
@@ -90,6 +90,19 @@ impl Apply for ModifyStat {
     fn apply(&self, _sim: &SimState, query: &mut QueryActor, _source: Entity, target: Entity) {
         if let Ok((_, _, _, _, _, _, _, _, mut stats)) = query.get_mut(target) {
             stats.add(self.stat, self.amount);
+        }
+    }
+}
+
+pub struct ModifySpecialStat {
+    pub stat: SpecialStat,
+    pub amount: i64,
+}
+
+impl Apply for ModifySpecialStat {
+    fn apply(&self, _sim: &SimState, query: &mut QueryActor, _source: Entity, target: Entity) {
+        if let Ok((_, _, _, _, _, _, _, _, mut stats)) = query.get_mut(target) {
+            stats.set_special(self.stat, self.amount);
         }
     }
 }

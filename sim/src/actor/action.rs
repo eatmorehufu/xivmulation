@@ -1,6 +1,6 @@
 use super::apply::Apply;
 use super::QueryActor;
-use crate::sim::{SimState, SimTime};
+use crate::sim::SimState;
 use bevy_ecs::prelude::Entity;
 use delegate::delegate;
 use std::collections::HashMap;

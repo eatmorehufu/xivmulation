@@ -1,5 +1,5 @@
 pub mod lookup;
-use super::stat::{Stat, Stats};
+use super::stat::{SpecialStat, Stat, Stats};
 use crate::sim::SimState;
 use math::round::floor;
 
@@ -34,7 +34,11 @@ pub fn direct_damage(
     // D2 = ⌊ D1 × f(TNC) ⌋ /1000 ⌋ × f(WD) ⌋ /100 ⌋ × Trait ⌋ /100 ⌋
     let d2 = (((((d1 * ftnc) / 1000) * fwd) / 100) * job.trait_multiplier()) / 100;
 
-    let crit = critical_hit(sim, stats.get(Stat::CriticalHitRate));
+    let crit = critical_hit(
+        sim,
+        stats.get(Stat::CriticalHitRate),
+        stats.get_special(SpecialStat::CriticalHitPercentOverride),
+    );
     let dh = direct_hit(sim, stats.get(Stat::DirectHitRate));
     // D3 = ⌊ D2 × CRIT? ⌋ /1000 ⌋ × DH? ⌋ /100 ⌋
     let d3 = (((d2 * crit) / 1000) * dh) / 100;
@@ -101,10 +105,13 @@ fn critical_hit_rate(chr: i64) -> f64 {
     ) / 10.0
 }
 
-fn is_crit(sim: &SimState, chr: i64) -> bool {
+fn is_crit(sim: &SimState, chr: i64, crit_percent_override: Option<&i64>) -> bool {
     let roll = sim.rng.random();
-    let probability = critical_hit_rate(chr) / 100.0;
-    roll < probability
+    let percent = match crit_percent_override {
+        Some(p) => *p as f64,
+        None => critical_hit_rate(chr),
+    };
+    roll < percent / 100.0
 }
 
 fn critical_hit_damage(crit: i64) -> i64 {
@@ -116,8 +123,8 @@ fn critical_hit_damage(crit: i64) -> i64 {
 
 // F(CRIT)
 // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#critical-hit-damage-fcrit
-fn critical_hit(sim: &SimState, crit: i64) -> i64 {
-    if !is_crit(sim, crit) {
+fn critical_hit(sim: &SimState, crit: i64, crit_percent_override: Option<&i64>) -> i64 {
+    if !is_crit(sim, crit, crit_percent_override) {
         return 1000;
     }
     critical_hit_damage(crit)
@@ -152,6 +159,19 @@ fn direct_hit(sim: &SimState, crit: i64) -> i64 {
 mod test {
     use super::*;
     use crate::sim::SimRng;
+    pub struct FakeRng {
+        random_value: f64,
+        random_from_range_value: i64,
+    }
+
+    impl SimRng for FakeRng {
+        fn random(&self) -> f64 {
+            self.random_value
+        }
+        fn random_from_range(&self, _low_inclusive: i64, _high_exclusive: i64) -> i64 {
+            self.random_from_range_value
+        }
+    }
 
     #[test]
     fn test_direct_hit_rate() {
@@ -188,6 +208,26 @@ mod test {
         assert_eq!(1400, critical_hit_damage(380));
     }
 
+    #[test]
+    fn test_is_crit() {
+        let sim = SimState::new(FakeRng {
+            random_value: 0.5,
+            random_from_range_value: 100,
+        });
+
+        assert_eq!(false, is_crit(&sim, 0, None));
+    }
+
+    #[test]
+    fn test_is_crit_with_override() {
+        let sim = SimState::new(FakeRng {
+            random_value: 0.5,
+            random_from_range_value: 100,
+        });
+
+        assert_eq!(true, is_crit(&sim, 0, Some::<&i64>(&51)));
+    }
+
     /*
     fast blade potency 200
     6523
@@ -212,20 +252,6 @@ mod test {
     10947!
     12883!!
     */
-
-    pub struct FakeRng {
-        random_value: f64,
-        random_from_range_value: i64,
-    }
-
-    impl SimRng for FakeRng {
-        fn random(&self) -> f64 {
-            self.random_value
-        }
-        fn random_from_range(&self, _low_inclusive: i64, _high_exclusive: i64) -> i64 {
-            self.random_from_range_value
-        }
-    }
 
     fn get_stats() -> Stats {
         let mut stats = Stats::default();
