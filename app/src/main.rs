@@ -17,6 +17,8 @@ pub struct Model {
     navbar_active: bool,
 }
 
+const SUPPORTED_JOBS:  &'static [&'static str] = &["pld"];
+
 impl Component for Model {
     type Message = Msg;
     type Properties = ();
@@ -110,7 +112,11 @@ impl Model {
                 html! { <Home /> }
             }
             AppRoute::JobPage(job_name) => {
-                html! { <JobPage job_name = job_name /> }
+                // TODO: This cannot possibly be idiomatic Rust.
+                if SUPPORTED_JOBS.iter().any(|x| x.to_string() == job_name) {
+                    return html! { <JobPage job_name = job_name /> };
+                }
+                html! { <PageNotFound route=job_name /> }      
             }
             AppRoute::PageNotFound(Permissive(route)) => {
                 html! { <PageNotFound route=route /> }
