@@ -3,7 +3,7 @@ use yew_router::{route::Route, switch::Permissive};
 
 mod pages;
 use pages::{
-    about::About, home::Home, page_not_found::PageNotFound, job::Job,
+    about::About, home::Home, page_not_found::PageNotFound, job_page::JobPage,
 };
 mod switch;
 use switch::{AppAnchor, AppRoute, AppRouter, PublicUrlSwitch};
@@ -109,8 +109,8 @@ impl Model {
             AppRoute::Home => {
                 html! { <Home /> }
             }
-            AppRoute::Job(job) => {
-                html! { <Job job = job /> }
+            AppRoute::JobPage(job_name) => {
+                html! { <JobPage job_name = job_name /> }
             }
             AppRoute::PageNotFound(Permissive(route)) => {
                 html! { <PageNotFound route=route /> }
