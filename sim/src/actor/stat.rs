@@ -32,16 +32,16 @@ pub enum Stat {
 
 #[derive(Default)]
 pub struct Stats {
-    delta: HashMap<Stat, i32>,
-    base: HashMap<Stat, i32>,
+    delta: HashMap<Stat, i64>,
+    base: HashMap<Stat, i64>,
 }
 
 impl Stats {
-    pub fn get(&self, stat: Stat) -> i32 {
+    pub fn get(&self, stat: Stat) -> i64 {
         self.delta.get(&stat).unwrap_or(&0) + self.base.get(&stat).unwrap_or(&0)
     }
 
-    pub fn add(&mut self, stat: Stat, amount: i32) {
+    pub fn add(&mut self, stat: Stat, amount: i64) {
         match self.delta.get_mut(&stat) {
             Some(value) => *value += amount,
             None => {
@@ -54,7 +54,7 @@ impl Stats {
         self.delta.clear();
     }
 
-    pub fn set_base(&mut self, stat: Stat, amount: i32) {
+    pub fn set_base(&mut self, stat: Stat, amount: i64) {
         self.base.insert(stat, amount);
     }
 }

@@ -83,7 +83,7 @@ impl std::fmt::Debug for Status {
 
 pub struct ModifyStat {
     pub stat: Stat,
-    pub amount: i32,
+    pub amount: i64,
 }
 
 impl Apply for ModifyStat {

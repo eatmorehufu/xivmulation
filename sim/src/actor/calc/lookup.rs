@@ -14,7 +14,7 @@ pub enum LevelColumn {
 // Assume level 80
 // https://www.akhmorning.com/allagan-studies/modifiers/
 #[allow(dead_code)]
-pub fn level_modifiers(column: LevelColumn) -> i32 {
+pub fn level_modifiers(column: LevelColumn) -> i64 {
     match column {
         LevelColumn::MP => 10000,
         LevelColumn::MAIN => 340,
@@ -71,7 +71,7 @@ impl Job {
         }
     }
 
-    pub fn trait_multiplier(&self) -> i32 {
+    pub fn trait_multiplier(&self) -> i64 {
         match self {
             Job::ARC | Job::BRD | Job::MCH | Job::DNC => 120,
             Job::THM | Job::ACN | Job::BLM | Job::SMN | Job::RDM => 130,
@@ -104,7 +104,7 @@ macro_rules! job_stat_match {
 
 // TODO: Maybe this should be a CSV or something, but this works for now.
 // https://www.akhmorning.com/allagan-studies/modifiers/
-pub fn job_modifiers(job: Job, stat: Stat) -> i32 {
+pub fn job_modifiers(job: Job, stat: Stat) -> i64 {
     match job {
         Job::GLA => job_stat_match!(stat, 110, 49, 95, 100, 90, 50, 95),
         Job::PGL => job_stat_match!(stat, 105, 34, 100, 95, 100, 45, 85),

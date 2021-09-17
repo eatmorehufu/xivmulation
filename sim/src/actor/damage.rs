@@ -1,10 +1,10 @@
 #[derive(Default)]
-pub struct Damage(i32);
+pub struct Damage(i64);
 
 impl Damage {
-    pub fn add(&mut self, amount: i32) {
+    pub fn add(&mut self, amount: i64) {
+        println!("Damage dealt: {}", amount);
         self.0 += amount;
-        println!("Total Damage: {}", self.0);
     }
 }
 

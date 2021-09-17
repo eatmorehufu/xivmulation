@@ -25,21 +25,14 @@ impl Actions {
 pub struct Action {
     pub id: u32,
     pub name: String,
-    pub target_self: bool,
     pub ogcd: bool,
-    // recast_duration is the duration of time in ms till the action can be performed again.
-    pub recast_duration: SimTime,
     pub results: Vec<Arc<dyn Apply + Send + Sync>>,
 }
 
 impl Action {
     pub fn perform(&self, sim: &SimState, query: &mut QueryActor, source: Entity, target: Entity) {
         for result in &self.results {
-            if self.target_self {
-                result.apply(sim, query, source, source);
-            } else {
-                result.apply(sim, query, source, target);
-            }
+            result.apply(sim, query, source, target);
         }
     }
 }

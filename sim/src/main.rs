@@ -3,7 +3,7 @@ mod sim;
 
 use actor::action::{Action, Actions};
 use actor::apply::Apply;
-use actor::apply::{DoDamage, GiveStatusEffect, StartRecast};
+use actor::apply::{DoDamage, GiveStatusEffect, StartGcd, StartRecast};
 use actor::calc::lookup::Job;
 use actor::calc::AttackType;
 use actor::damage::Damage;
@@ -20,7 +20,9 @@ use std::sync::Arc;
 
 fn setup(mut commands: Commands) {
     let mut actions = Actions::default();
-    actions.add(actor::Action {
+    let mut rotation = Rotation::default();
+
+    let life_surge = actor::Action {
         id: 0,
         name: "Life Surge".into(),
         ogcd: true,
@@ -31,7 +33,7 @@ fn setup(mut commands: Commands) {
                     duration: 10000,
                     effects: vec![Arc::new(ModifyStat {
                         stat: Stat::CriticalHitRate,
-                        amount: 100, // TODO: figure out real math
+                        amount: 9999, // TODO: figure out real math
                     })],
                 },
                 target_source: true,
@@ -43,21 +45,43 @@ fn setup(mut commands: Commands) {
             }),
         ],
         ..Default::default()
-    });
-    actions.add(actor::Action {
+    };
+    let true_thrust = actor::Action {
         id: 1,
         name: "True Thrust".into(),
-        results: vec![Arc::new(DoDamage {
-            potency: 1000,
-            attack_type: AttackType::PHYSICAL,
-        })],
+        results: vec![
+            Arc::new(DoDamage {
+                potency: 1000,
+                attack_type: AttackType::PHYSICAL,
+            }),
+            Arc::new(StartGcd::default()),
+        ],
         ..Default::default()
-    });
+    };
+    rotation.add(RotationEntry::new(&life_surge));
+    rotation.add(RotationEntry::new(&true_thrust));
+    actions.add(life_surge);
+    actions.add(true_thrust);
 
-    let mut rotation = Rotation::default();
-    // NEXT: put life surge on CD and ensure we perform the whole rotation.
-    rotation.add(RotationEntry { action_id: 0 });
-    rotation.add(RotationEntry { action_id: 1 });
+    let mut stats = Stats::default();
+    stats.set_base(Stat::PhysicalWeaponDamage, 134);
+    stats.set_base(Stat::Strength, 5435);
+    stats.set_base(Stat::Dexterity, 326);
+    stats.set_base(Stat::Vitality, 6258);
+    stats.set_base(Stat::Intelligence, 206);
+    stats.set_base(Stat::Mind, 339);
+    stats.set_base(Stat::CriticalHitRate, 3543);
+    stats.set_base(Stat::Determination, 2965);
+    stats.set_base(Stat::DirectHitRate, 1620);
+    stats.set_base(Stat::Defense, 8740);
+    stats.set_base(Stat::MagicDefense, 8740);
+    stats.set_base(Stat::AttackPower, 5435);
+    stats.set_base(Stat::SkillSpeed, 1012);
+    stats.set_base(Stat::AttackMagicPotency, 206);
+    stats.set_base(Stat::HealingMagicPotency, 339);
+    stats.set_base(Stat::SpellSpeed, 380);
+    stats.set_base(Stat::Tenacity, 606);
+    stats.set_base(Stat::Piety, 340);
 
     commands.spawn().insert(SimState::default());
     commands.spawn_bundle((
@@ -68,7 +92,7 @@ fn setup(mut commands: Commands) {
         RecastExpirations::default(),
         Damage::default(),
         StatusEffects::default(),
-        Stats::default(),
+        stats,
     ));
     commands.spawn_bundle((
         Target::default(),

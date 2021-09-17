@@ -8,7 +8,7 @@ pub const MS_PER_TICK: SimTime = 1000 / TICKS_PER_SECOND;
 
 pub trait SimRng {
     fn random(&self) -> f64;
-    fn random_from_range(&self, low_inclusive: i32, high_exclusive: i32) -> i32;
+    fn random_from_range(&self, low_inclusive: i64, high_exclusive: i64) -> i64;
 }
 
 struct RealRng {}
@@ -18,7 +18,7 @@ impl SimRng for RealRng {
         random::<f64>()
     }
 
-    fn random_from_range(&self, low_inclusive: i32, high_exclusive: i32) -> i32 {
+    fn random_from_range(&self, low_inclusive: i64, high_exclusive: i64) -> i64 {
         rand::thread_rng().gen_range(low_inclusive..high_exclusive)
     }
 }
