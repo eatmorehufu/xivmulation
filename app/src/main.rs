@@ -116,6 +116,7 @@ impl Model {
                 if SUPPORTED_JOBS.iter().any(|x| x.to_string() == job_name) {
                     return html! { <JobPage job_name = job_name /> };
                 }
+                // This should be a redirect, not just a not-found render.
                 html! { <PageNotFound route=job_name /> }      
             }
             AppRoute::PageNotFound(Permissive(route)) => {
