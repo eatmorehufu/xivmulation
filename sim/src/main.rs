@@ -3,25 +3,28 @@ mod sim;
 
 use actor::action::{Action, Actions};
 use actor::apply::Apply;
-use actor::apply::{DoDamage, GiveStatusEffect, StartGcd, StartRecast};
+use actor::apply::{DoDirectDamage, GiveStatusEffect, StartGcd, StartRecast};
 use actor::calc::lookup::Job;
 use actor::calc::AttackType;
 use actor::damage::Damage;
 use actor::recast_expirations::RecastExpirations;
 use actor::rotation::{Rotation, RotationEntry};
 use actor::stat::{SpecialStat, Stat, Stats};
-use actor::status_effect::{ModifySpecialStat, Status, StatusEffect, StatusEffects};
+use actor::status_effect::{ModifySpecialStat, Status, StatusEffect, StatusEffects, StatusFlag};
 use actor::{Actor, ActorBundle, QueryActor, Target};
 use bevy_app::{App, ScheduleRunnerPlugin, ScheduleRunnerSettings};
 use bevy_ecs::prelude::*;
 use bevy_utils::Duration;
 use sim::SimState;
+use std::collections::HashSet;
 use std::sync::Arc;
 
 fn setup(mut commands: Commands) {
     let mut actions = Actions::default();
     let mut rotation = Rotation::default();
 
+    let mut life_surge_flags = HashSet::<StatusFlag>::new();
+    life_surge_flags.insert(StatusFlag::ExpireOnDirectDamage);
     let life_surge = actor::Action {
         id: 0,
         name: "Life Surge".into(),
@@ -31,6 +34,7 @@ fn setup(mut commands: Commands) {
                 status: Status {
                     name: "Life Surge".into(),
                     duration: 10000,
+                    flags: life_surge_flags,
                     effects: vec![Arc::new(ModifySpecialStat {
                         stat: SpecialStat::CriticalHitPercentOverride,
                         amount: 100,
@@ -50,7 +54,7 @@ fn setup(mut commands: Commands) {
         id: 1,
         name: "True Thrust".into(),
         results: vec![
-            Arc::new(DoDamage {
+            Arc::new(DoDirectDamage {
                 potency: 1000,
                 attack_type: AttackType::PHYSICAL,
             }),

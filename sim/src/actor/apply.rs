@@ -1,5 +1,5 @@
 use super::calc;
-use super::status_effect::{Status, StatusEffect};
+use super::status_effect::{Status, StatusEffect, StatusFlag};
 use super::QueryActor;
 use crate::sim::{SimState, SimTime};
 use bevy_ecs::prelude::Entity;
@@ -8,17 +8,18 @@ pub trait Apply {
     fn apply(&self, sim: &SimState, query: &mut QueryActor, source: Entity, target: Entity);
 }
 
-pub struct DoDamage {
+pub struct DoDirectDamage {
     pub potency: i64,
     pub attack_type: calc::AttackType,
 }
 
-impl Apply for DoDamage {
+impl Apply for DoDirectDamage {
     fn apply(&self, sim: &SimState, query: &mut QueryActor, source: Entity, target: Entity) {
         let calculated_damage;
-        if let Ok((_, _, job, _, _, _, _, _, stats)) = query.get_mut(source) {
+        if let Ok((_, _, job, _, _, _, _, mut status_effects, stats)) = query.get_mut(source) {
             calculated_damage =
                 calc::direct_damage(sim, self.potency, *job, &stats, self.attack_type, vec![]);
+            status_effects.expire_with_flag(StatusFlag::ExpireOnDirectDamage);
         } else {
             panic!("Tried to get stats of a source with no stats.")
         }

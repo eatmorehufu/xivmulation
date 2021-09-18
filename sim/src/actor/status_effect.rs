@@ -4,6 +4,7 @@ use super::QueryActor;
 use crate::sim::{SimState, SimTime};
 use bevy_ecs::prelude::Entity;
 use delegate::delegate;
+use std::collections::HashSet;
 use std::sync::Arc;
 
 // TODO: Maybe a time ordered heap would be faster. Benchmark when we have more functionality.
@@ -17,23 +18,17 @@ impl StatusEffects {
             pub fn add(&mut self, status_effect: StatusEffect);
             pub fn len(&self) -> usize;
             pub fn iter(&self) -> std::slice::Iter<StatusEffect>;
-            pub fn remove(&mut self, index: usize) -> StatusEffect;
         }
     }
     pub fn remove_expired(&mut self, sim_time: SimTime) {
-        let mut to_remove = Vec::<usize>::default();
-        for (i, effect) in self.0.iter().enumerate() {
-            if effect.expiration < sim_time {
-                to_remove.push(i);
+        self.0.retain(|effect| !effect.is_expired(sim_time));
+    }
+
+    pub fn expire_with_flag(&mut self, flag: StatusFlag) {
+        for effect in self.0.iter_mut() {
+            if effect.has_flag(&flag) {
+                effect.expire();
             }
-        }
-        for i in to_remove.iter() {
-            println!("Removing status effect... ");
-            // TODO: This is O(n^2)...
-            // could do better with a data structure that supports adding
-            // and removing in constant time if this becomes a bottleneck.
-            // Should be fine for short effects lists.
-            self.remove(*i);
         }
     }
 }
@@ -45,6 +40,8 @@ pub struct StatusEffect {
     pub expiration: SimTime,
     pub status: Status,
     pub source: Entity,
+    // expired can be set to true to force an effect to expire without the expiration time passing.
+    pub force_expired: bool,
 }
 
 impl StatusEffect {
@@ -53,7 +50,22 @@ impl StatusEffect {
             expiration: sim_time + status.duration,
             status: status,
             source: source,
+            force_expired: false,
         };
+    }
+
+    pub fn is_expired(&self, sim_time: SimTime) -> bool {
+        self.force_expired || sim_time >= self.expiration
+    }
+
+    pub fn expire(&mut self) {
+        self.force_expired = true;
+    }
+
+    delegate! {
+        to self.status {
+            pub fn has_flag(&self, flag: &StatusFlag) -> bool;
+        }
     }
 }
 
@@ -67,9 +79,19 @@ impl Apply for StatusEffect {
 
 #[derive(Default, Clone)]
 pub struct Status {
-    pub name: String,
+    pub name: &'static str,
     pub duration: SimTime,
     pub effects: Vec<Arc<dyn Apply + Send + Sync>>,
+    pub flags: HashSet<StatusFlag>,
+}
+
+impl Status {
+    delegate! {
+        to self.flags {
+            #[call(contains)]
+            fn has_flag(&self, flag: &StatusFlag) -> bool;
+        }
+    }
 }
 
 impl std::fmt::Debug for Status {
@@ -79,6 +101,11 @@ impl std::fmt::Debug for Status {
             .field("duration", &self.duration)
             .finish()
     }
+}
+
+#[derive(PartialEq, Eq, Hash, Copy, Clone)]
+pub enum StatusFlag {
+    ExpireOnDirectDamage,
 }
 
 pub struct ModifyStat {
@@ -142,10 +169,109 @@ mod tests {
     #[test]
     fn remove_expired() {
         let mut effects = StatusEffects::default();
-        effects.add(StatusEffect::new(Status::default(), Entity::new(1), 10));
-        effects.add(StatusEffect::new(Status::default(), Entity::new(1), 12));
+        let should_expire = Status {
+            name: "Should Expire",
+            ..Default::default()
+        };
+        let should_not_expire = Status {
+            name: "Should Not Expire",
+            ..Default::default()
+        };
+        effects.add(StatusEffect::new(should_expire.clone(), Entity::new(1), 10));
+        effects.add(StatusEffect::new(
+            should_not_expire.clone(),
+            Entity::new(2),
+            12,
+        ));
+        effects.add(StatusEffect::new(should_expire.clone(), Entity::new(1), 10));
+        effects.add(StatusEffect::new(
+            should_not_expire.clone(),
+            Entity::new(2),
+            12,
+        ));
+        effects.add(StatusEffect::new(should_expire.clone(), Entity::new(1), 10));
+        assert_eq!(5, effects.len());
+        effects.remove_expired(11);
         assert_eq!(2, effects.len());
+
+        for effect in effects.iter() {
+            assert_eq!(should_not_expire.name, effect.status.name);
+        }
+    }
+
+    #[test]
+    fn expire_with_flag() {
+        let mut effects = StatusEffects::default();
+        let mut flags = HashSet::<StatusFlag>::new();
+        flags.insert(StatusFlag::ExpireOnDirectDamage);
+        let should_expire = Status {
+            name: "Should Expire",
+            flags: flags,
+            ..Default::default()
+        };
+        let should_not_expire = Status {
+            name: "Should Not Expire",
+            ..Default::default()
+        };
+        effects.add(StatusEffect::new(should_expire.clone(), Entity::new(1), 12));
+        effects.add(StatusEffect::new(
+            should_not_expire.clone(),
+            Entity::new(1),
+            12,
+        ));
+
+        effects.remove_expired(11);
+        assert_eq!(2, effects.len());
+        effects.expire_with_flag(StatusFlag::ExpireOnDirectDamage);
         effects.remove_expired(11);
         assert_eq!(1, effects.len());
+
+        for effect in effects.iter() {
+            assert_eq!(should_not_expire.name, effect.status.name);
+        }
+    }
+
+    #[test]
+    fn is_expired() {
+        let effect = StatusEffect::new(Status::default(), Entity::new(1), 10);
+        assert_eq!(false, effect.is_expired(9));
+        assert_eq!(true, effect.is_expired(10));
+        assert_eq!(true, effect.is_expired(11));
+    }
+
+    #[test]
+    fn expire() {
+        let mut effect = StatusEffect::new(Status::default(), Entity::new(1), 10);
+        assert_eq!(false, effect.is_expired(9));
+        effect.expire();
+        assert_eq!(true, effect.is_expired(9));
+    }
+
+    #[test]
+    fn has_flag() {
+        let mut flags = HashSet::<StatusFlag>::new();
+        flags.insert(StatusFlag::ExpireOnDirectDamage);
+        let effect = StatusEffect::new(
+            Status {
+                flags: flags,
+                ..Default::default()
+            },
+            Entity::new(1),
+            10,
+        );
+        assert_eq!(true, effect.has_flag(&StatusFlag::ExpireOnDirectDamage));
+    }
+
+    #[test]
+    fn has_flag2() {
+        let effect = StatusEffect::new(
+            Status {
+                flags: HashSet::<StatusFlag>::new(),
+                ..Default::default()
+            },
+            Entity::new(1),
+            10,
+        );
+        assert_eq!(false, effect.has_flag(&StatusFlag::ExpireOnDirectDamage));
     }
 }
