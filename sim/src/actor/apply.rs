@@ -1,5 +1,6 @@
 use super::calc;
-use super::status_effect::{Status, StatusEffect, StatusFlag};
+use super::status_effect::status::{Status, StatusFlag};
+use super::status_effect::StatusEffect;
 use super::QueryActor;
 use crate::sim::{SimState, SimTime};
 use bevy_ecs::prelude::Entity;

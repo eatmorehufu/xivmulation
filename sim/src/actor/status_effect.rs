@@ -1,11 +1,10 @@
-use super::stat::{SpecialStat, Stat};
+pub mod status;
 use super::Apply;
 use super::QueryActor;
 use crate::sim::{SimState, SimTime};
 use bevy_ecs::prelude::Entity;
 use delegate::delegate;
-use std::collections::HashSet;
-use std::sync::Arc;
+use status::{Status, StatusFlag};
 
 // TODO: Maybe a time ordered heap would be faster. Benchmark when we have more functionality.
 #[derive(Default)]
@@ -77,66 +76,10 @@ impl Apply for StatusEffect {
     }
 }
 
-#[derive(Default, Clone)]
-pub struct Status {
-    pub name: &'static str,
-    pub duration: SimTime,
-    pub effects: Vec<Arc<dyn Apply + Send + Sync>>,
-    pub flags: HashSet<StatusFlag>,
-}
-
-impl Status {
-    delegate! {
-        to self.flags {
-            #[call(contains)]
-            fn has_flag(&self, flag: &StatusFlag) -> bool;
-        }
-    }
-}
-
-impl std::fmt::Debug for Status {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("Status")
-            .field("name", &self.name)
-            .field("duration", &self.duration)
-            .finish()
-    }
-}
-
-#[derive(PartialEq, Eq, Hash, Copy, Clone)]
-pub enum StatusFlag {
-    ExpireOnDirectDamage,
-}
-
-pub struct ModifyStat {
-    pub stat: Stat,
-    pub amount: i64,
-}
-
-impl Apply for ModifyStat {
-    fn apply(&self, _sim: &SimState, query: &mut QueryActor, _source: Entity, target: Entity) {
-        if let Ok((_, _, _, _, _, _, _, _, mut stats)) = query.get_mut(target) {
-            stats.add(self.stat, self.amount);
-        }
-    }
-}
-
-pub struct ModifySpecialStat {
-    pub stat: SpecialStat,
-    pub amount: i64,
-}
-
-impl Apply for ModifySpecialStat {
-    fn apply(&self, _sim: &SimState, query: &mut QueryActor, _source: Entity, target: Entity) {
-        if let Ok((_, _, _, _, _, _, _, _, mut stats)) = query.get_mut(target) {
-            stats.set_special(self.stat, self.amount);
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::HashSet;
     #[test]
     fn status_effect_new() {
         let status_effect = StatusEffect::new(Status::default(), Entity::new(1), 10);
@@ -230,7 +173,6 @@ mod tests {
             assert_eq!(should_not_expire.name, effect.status.name);
         }
     }
-
     #[test]
     fn is_expired() {
         let effect = StatusEffect::new(Status::default(), Entity::new(1), 10);
