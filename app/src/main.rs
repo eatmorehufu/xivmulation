@@ -3,7 +3,7 @@ use yew_router::{route::Route, switch::Permissive};
 
 mod pages;
 use pages::{
-    about::About, home::Home, page_not_found::PageNotFound, job::Job,
+    about::About, home::Home, page_not_found::PageNotFound, job_page::JobPage,
 };
 mod switch;
 use switch::{AppAnchor, AppRoute, AppRouter, PublicUrlSwitch};
@@ -16,6 +16,8 @@ pub struct Model {
     link: ComponentLink<Self>,
     navbar_active: bool,
 }
+
+const SUPPORTED_JOBS:  &'static [&'static str] = &["pld"];
 
 impl Component for Model {
     type Message = Msg;
@@ -109,8 +111,13 @@ impl Model {
             AppRoute::Home => {
                 html! { <Home /> }
             }
-            AppRoute::Job(job) => {
-                html! { <Job job = job /> }
+            AppRoute::JobPage(job_name) => {
+                // TODO: This cannot possibly be idiomatic Rust.
+                if SUPPORTED_JOBS.iter().any(|x| x.to_string() == job_name) {
+                    return html! { <JobPage job_name = job_name /> };
+                }
+                // This should be a redirect, not just a not-found render.
+                html! { <PageNotFound route=job_name /> }      
             }
             AppRoute::PageNotFound(Permissive(route)) => {
                 html! { <PageNotFound route=route /> }
