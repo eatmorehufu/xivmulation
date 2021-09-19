@@ -12,10 +12,12 @@ use apply::Apply;
 use bevy_ecs::prelude::{Entity, Query};
 use calc::lookup::Job;
 use damage::Damage;
+use delegate::delegate;
 use recast_expirations::RecastExpirations;
 use rotation::Rotation;
 use stat::Stats;
 use status_effect::StatusEffects;
+use std::collections::HashSet;
 
 pub type ActorBundle = (
     Entity,
@@ -27,6 +29,7 @@ pub type ActorBundle = (
     &'static mut Damage,
     &'static mut StatusEffects,
     &'static mut Stats,
+    &'static mut ActiveCombos,
 );
 
 pub type QueryActor<'a> = Query<'a, ActorBundle>;
@@ -38,3 +41,21 @@ pub struct Target {}
 // TODO: not everything should be pub, but I'm being lazy right now...
 #[derive(Default)]
 pub struct Actor {}
+
+#[derive(Default)]
+pub struct ActiveCombos(HashSet<&'static str>);
+
+impl ActiveCombos {
+    delegate! {
+        to self.0 {
+            #[call(contains)]
+            pub fn has_action(&self, action_name: &'static str) -> bool;
+            #[call(insert)]
+            pub fn add_action(&mut self, action_name: &'static str);
+            #[call(remove)]
+            pub fn remove_action(&mut self, action_name: &'static str);
+            #[call(clear)]
+            pub fn reset(&mut self);
+        }
+    }
+}

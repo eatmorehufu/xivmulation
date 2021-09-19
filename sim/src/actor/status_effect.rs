@@ -4,7 +4,7 @@ use super::QueryActor;
 use crate::sim::{SimState, SimTime};
 use bevy_ecs::prelude::Entity;
 use delegate::delegate;
-use status::{Status, StatusFlag};
+use status::{Status, StatusFlag, StatusFlags};
 
 // TODO: Maybe a time ordered heap would be faster. Benchmark when we have more functionality.
 #[derive(Default)]
@@ -113,11 +113,11 @@ mod tests {
     fn remove_expired() {
         let mut effects = StatusEffects::default();
         let should_expire = Status {
-            name: "Should Expire",
+            name: "Should Expire".into(),
             ..Default::default()
         };
         let should_not_expire = Status {
-            name: "Should Not Expire",
+            name: "Should Not Expire".into(),
             ..Default::default()
         };
         effects.add(StatusEffect::new(should_expire.clone(), Entity::new(1), 10));
@@ -145,15 +145,13 @@ mod tests {
     #[test]
     fn expire_with_flag() {
         let mut effects = StatusEffects::default();
-        let mut flags = HashSet::<StatusFlag>::new();
-        flags.insert(StatusFlag::ExpireOnDirectDamage);
         let should_expire = Status {
-            name: "Should Expire",
-            flags: flags,
+            name: "Should Expire".into(),
+            flags: StatusFlags::new(&[StatusFlag::ExpireOnDirectDamage]),
             ..Default::default()
         };
         let should_not_expire = Status {
-            name: "Should Not Expire",
+            name: "Should Not Expire".into(),
             ..Default::default()
         };
         effects.add(StatusEffect::new(should_expire.clone(), Entity::new(1), 12));
@@ -195,7 +193,7 @@ mod tests {
         flags.insert(StatusFlag::ExpireOnDirectDamage);
         let effect = StatusEffect::new(
             Status {
-                flags: flags,
+                flags: StatusFlags::new(&[StatusFlag::ExpireOnDirectDamage]),
                 ..Default::default()
             },
             Entity::new(1),
@@ -206,14 +204,7 @@ mod tests {
 
     #[test]
     fn has_flag2() {
-        let effect = StatusEffect::new(
-            Status {
-                flags: HashSet::<StatusFlag>::new(),
-                ..Default::default()
-            },
-            Entity::new(1),
-            10,
-        );
+        let effect = StatusEffect::new(Status::default(), Entity::new(1), 10);
         assert_eq!(false, effect.has_flag(&StatusFlag::ExpireOnDirectDamage));
     }
 }

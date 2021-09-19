@@ -10,6 +10,12 @@ pub enum AttackType {
     MAGIC,
 }
 
+impl Default for AttackType {
+    fn default() -> Self {
+        AttackType::PHYSICAL
+    }
+}
+
 // https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/damage-and-healing/#direct-damage-d
 pub fn direct_damage(
     sim: &SimState,

@@ -3,29 +3,26 @@ mod sim;
 
 use actor::action::{Action, Actions};
 use actor::apply::Apply;
-use actor::apply::{DoDirectDamage, GiveStatusEffect, StartGcd, StartRecast};
+use actor::apply::{ApplyCombo, DoDirectDamage, GiveStatusEffect, StartGcd, StartRecast};
 use actor::calc::lookup::Job;
-use actor::calc::AttackType;
 use actor::damage::Damage;
 use actor::recast_expirations::RecastExpirations;
 use actor::rotation::{Rotation, RotationEntry};
 use actor::stat::{SpecialStat, Stat, Stats};
-use actor::status_effect::status::{ModifySpecialStat, Status, StatusFlag};
+use actor::status_effect::status;
+use actor::status_effect::status::{Status, StatusFlag, StatusFlags};
 use actor::status_effect::{StatusEffect, StatusEffects};
-use actor::{Actor, ActorBundle, QueryActor, Target};
+use actor::{ActiveCombos, Actor, ActorBundle, QueryActor, Target};
 use bevy_app::{App, ScheduleRunnerPlugin, ScheduleRunnerSettings};
 use bevy_ecs::prelude::*;
 use bevy_utils::Duration;
 use sim::SimState;
-use std::collections::HashSet;
 use std::sync::Arc;
 
 fn setup(mut commands: Commands) {
     let mut actions = Actions::default();
     let mut rotation = Rotation::default();
 
-    let mut life_surge_flags = HashSet::<StatusFlag>::new();
-    life_surge_flags.insert(StatusFlag::ExpireOnDirectDamage);
     let life_surge = actor::Action {
         id: 0,
         name: "Life Surge".into(),
@@ -35,8 +32,8 @@ fn setup(mut commands: Commands) {
                 status: Status {
                     name: "Life Surge".into(),
                     duration: 10000,
-                    flags: life_surge_flags,
-                    effects: vec![Arc::new(ModifySpecialStat {
+                    flags: StatusFlags::new(&[StatusFlag::ExpireOnDirectDamage]),
+                    effects: vec![Arc::new(status::ModifySpecialStat {
                         stat: SpecialStat::CriticalHitPercentOverride,
                         amount: 100,
                     })],
@@ -53,20 +50,42 @@ fn setup(mut commands: Commands) {
     };
     let true_thrust = actor::Action {
         id: 1,
-        name: "True Thrust".into(),
+        name: "True Thrust",
         results: vec![
             Arc::new(DoDirectDamage {
-                potency: 1000,
-                attack_type: AttackType::PHYSICAL,
+                potency: 290,
+                ..Default::default()
+            }),
+            Arc::new(StartRecast {
+                // TODO: maybe id can be inferred
+                action_id: 1,
+                duration: 5000,
+            }),
+            Arc::new(ApplyCombo("True Thrust")),
+            Arc::new(StartGcd::default()),
+        ],
+        ..Default::default()
+    };
+    let vorpal_thrust = actor::Action {
+        id: 2,
+        name: "Vorpal Thrust",
+        results: vec![
+            Arc::new(DoDirectDamage {
+                potency: 140,
+                combo_potency: Some(350),
+                combo_action_name: Some("True Thrust"),
+                ..Default::default()
             }),
             Arc::new(StartGcd::default()),
         ],
         ..Default::default()
     };
-    rotation.add(RotationEntry::new(&life_surge));
+    // rotation.add(RotationEntry::new(&life_surge));
     rotation.add(RotationEntry::new(&true_thrust));
+    rotation.add(RotationEntry::new(&vorpal_thrust));
     actions.add(life_surge);
     actions.add(true_thrust);
+    actions.add(vorpal_thrust);
 
     let mut stats = Stats::default();
     stats.set_base(Stat::PhysicalWeaponDamage, 134);
@@ -98,6 +117,7 @@ fn setup(mut commands: Commands) {
         Damage::default(),
         StatusEffects::default(),
         stats,
+        ActiveCombos::default(),
     ));
     commands.spawn_bundle((
         Target::default(),
@@ -109,6 +129,7 @@ fn setup(mut commands: Commands) {
         Damage::default(),
         StatusEffects::default(),
         Stats::default(),
+        ActiveCombos::default(),
     ));
 }
 
@@ -117,13 +138,20 @@ fn tick(mut sim_state_query: Query<&mut SimState>) {
         .single_mut()
         .expect("There should always be exactly one sim state.");
 
-    let sim_time = sim_state.tick();
-    println!("===== {}ms =====", sim_time);
+    if sim_state.tick() >= 10000 {
+        std::process::exit(0);
+    }
 }
 
-fn reset_stats(mut stats_query: Query<&mut Stats>) {
+fn reset_calculated_components(
+    mut stats_query: Query<&mut Stats>,
+    mut combo_query: Query<&mut ActiveCombos>,
+) {
     for mut stats in stats_query.iter_mut() {
         stats.reset();
+    }
+    for mut active_combos in combo_query.iter_mut() {
+        active_combos.reset();
     }
 }
 
@@ -152,7 +180,7 @@ fn process_status_effects(sim_state_query: Query<&SimState>, mut actor_query: Qu
         .expect("There should always be exactly one sim state.");
 
     let mut bundles = Vec::<StatusEffectApplyBundle>::default();
-    for (entity, _, _, _, _, _, _, status_effects, _) in actor_query.iter_mut() {
+    for (entity, _, _, _, _, _, _, status_effects, _, _) in actor_query.iter_mut() {
         println!("{} status effects", status_effects.len());
         for effect in status_effects.iter() {
             bundles.push(StatusEffectApplyBundle {
@@ -187,7 +215,7 @@ fn perform_actions(
         .expect("There should always be exactly one sim state.");
     let sim_time = sim.now();
 
-    let (temp_target_entity, _, _, _, _, _, _, _, _) = actor_queries
+    let (temp_target_entity, _, _, _, _, _, _, _, _, _) = actor_queries
         .q0_mut()
         .single_mut()
         .expect("There should always be exactly one sim state.");
@@ -195,7 +223,8 @@ fn perform_actions(
 
     let mut actor_query = actor_queries.q1_mut();
     let mut perform_bundles = Vec::<ActionPerformBundle>::default();
-    for (entity, _, _, actions, rotation, recast_expirations, _, _, _) in actor_query.iter_mut() {
+    for (entity, _, _, actions, rotation, recast_expirations, _, _, _, _) in actor_query.iter_mut()
+    {
         match rotation.get_next_action_id(sim_time, &recast_expirations) {
             Some(action_id) => match actions.get(&action_id) {
                 Some(action) => perform_bundles.push(ActionPerformBundle {
@@ -210,6 +239,11 @@ fn perform_actions(
     }
 
     for bundle in perform_bundles {
+        println!(
+            "===== {}s {} =====",
+            sim_time as f64 / 1000.0,
+            bundle.action.name
+        );
         bundle.action.perform(
             sim,
             &mut actor_query,
@@ -225,7 +259,7 @@ fn main() {
         .add_plugin(ScheduleRunnerPlugin::default())
         .add_startup_system(setup.system())
         .add_system(tick.system())
-        .add_system(reset_stats.system())
+        .add_system(reset_calculated_components.system())
         .add_system(remove_expired_status_effects.system())
         .add_system(process_status_effects.system())
         .add_system(perform_actions.system())

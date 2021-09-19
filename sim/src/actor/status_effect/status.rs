@@ -9,10 +9,10 @@ use std::sync::Arc;
 
 #[derive(Default, Clone)]
 pub struct Status {
-    pub name: &'static str,
+    pub name: String,
     pub duration: SimTime,
     pub effects: Vec<Arc<dyn Apply + Send + Sync>>,
-    pub flags: HashSet<StatusFlag>,
+    pub flags: StatusFlags,
 }
 
 impl Status {
@@ -38,6 +38,25 @@ pub enum StatusFlag {
     ExpireOnDirectDamage,
 }
 
+#[derive(Default, Clone)]
+pub struct StatusFlags(HashSet<StatusFlag>);
+
+impl StatusFlags {
+    pub fn new(flags: &[StatusFlag]) -> Self {
+        let mut status_flags = StatusFlags::default();
+        for flag in flags {
+            status_flags.0.insert(*flag);
+        }
+        status_flags
+    }
+
+    delegate! {
+        to self.0 {
+            pub fn contains(&self, flag: &StatusFlag) -> bool;
+        }
+    }
+}
+
 pub struct ModifyStat {
     pub stat: Stat,
     pub amount: i64,
@@ -45,7 +64,7 @@ pub struct ModifyStat {
 
 impl Apply for ModifyStat {
     fn apply(&self, _sim: &SimState, query: &mut QueryActor, _source: Entity, target: Entity) {
-        if let Ok((_, _, _, _, _, _, _, _, mut stats)) = query.get_mut(target) {
+        if let Ok((_, _, _, _, _, _, _, _, mut stats, _)) = query.get_mut(target) {
             stats.add(self.stat, self.amount);
         }
     }
@@ -58,12 +77,21 @@ pub struct ModifySpecialStat {
 
 impl Apply for ModifySpecialStat {
     fn apply(&self, _sim: &SimState, query: &mut QueryActor, _source: Entity, target: Entity) {
-        if let Ok((_, _, _, _, _, _, _, _, mut stats)) = query.get_mut(target) {
+        if let Ok((_, _, _, _, _, _, _, _, mut stats, _)) = query.get_mut(target) {
             stats.set_special(self.stat, self.amount);
         }
     }
 }
 
+pub struct SetCombo(pub &'static str);
+
+impl Apply for SetCombo {
+    fn apply(&self, _sim: &SimState, query: &mut QueryActor, source: Entity, _target: Entity) {
+        if let Ok((_, _, _, _, _, _, _, _, _, mut active_combos)) = query.get_mut(source) {
+            active_combos.add_action(self.0);
+        }
+    }
+}
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -74,10 +102,8 @@ mod tests {
     }
     #[test]
     fn has_flag2() {
-        let mut flags = HashSet::<StatusFlag>::new();
-        flags.insert(StatusFlag::ExpireOnDirectDamage);
         let status = Status {
-            flags: flags,
+            flags: StatusFlags::new(&[StatusFlag::ExpireOnDirectDamage]),
             ..Default::default()
         };
         assert_eq!(true, status.has_flag(&StatusFlag::ExpireOnDirectDamage));

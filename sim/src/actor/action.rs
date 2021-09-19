@@ -24,7 +24,7 @@ impl Actions {
 #[derive(Default, Clone)]
 pub struct Action {
     pub id: u32,
-    pub name: String,
+    pub name: &'static str,
     pub ogcd: bool,
     pub results: Vec<Arc<dyn Apply + Send + Sync>>,
 }
