@@ -9,10 +9,12 @@ pub struct RecastExpirations {
 
 impl RecastExpirations {
     pub fn check_ready(&self, action_id: u32, ogcd: bool, sim_time: SimTime) -> bool {
-        match self.actions.get(&action_id) {
-            Some(expiration) => (ogcd || self.check_gcd_ready(sim_time)) && *expiration <= sim_time,
-            None => true,
-        }
+        let ready = (ogcd || self.check_gcd_ready(sim_time))
+            && match self.actions.get(&action_id) {
+                Some(expiration) => *expiration <= sim_time,
+                None => true,
+            };
+        ready
     }
 
     pub fn set(&mut self, action_id: u32, expiration: SimTime) {
@@ -115,4 +117,13 @@ mod tests {
         },
         true
     );
+
+    #[test]
+    fn check_ready_no_recast_with_gcd() {
+        let recast_expirations = RecastExpirations {
+            gcd_expiration: 10,
+            ..Default::default()
+        };
+        assert_eq!(false, recast_expirations.check_ready(0, false, 9));
+    }
 }

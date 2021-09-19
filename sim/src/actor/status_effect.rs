@@ -4,7 +4,7 @@ use super::QueryActor;
 use crate::sim::{SimState, SimTime};
 use bevy_ecs::prelude::Entity;
 use delegate::delegate;
-use status::{Status, StatusFlag, StatusFlags};
+use status::{Status, StatusFlag};
 
 // TODO: Maybe a time ordered heap would be faster. Benchmark when we have more functionality.
 #[derive(Default)]
@@ -79,7 +79,9 @@ impl Apply for StatusEffect {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use status::StatusFlags;
     use std::collections::HashSet;
+
     #[test]
     fn status_effect_new() {
         let status_effect = StatusEffect::new(Status::default(), Entity::new(1), 10);
