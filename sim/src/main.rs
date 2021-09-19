@@ -56,8 +56,9 @@ fn setup(mut commands: Commands) {
                 potency: 290,
                 ..Default::default()
             }),
+            // TODO: Remove recast when we have conditions on rotation entries.
+            // This recast is just here to make the rotation use the other combo move.
             Arc::new(StartRecast {
-                // TODO: maybe id can be inferred
                 action_id: 1,
                 duration: 5000,
             }),
@@ -138,7 +139,7 @@ fn tick(mut sim_state_query: Query<&mut SimState>) {
         .single_mut()
         .expect("There should always be exactly one sim state.");
 
-    if sim_state.tick() >= 10000 {
+    if sim_state.tick() >= 15000 {
         std::process::exit(0);
     }
 }
