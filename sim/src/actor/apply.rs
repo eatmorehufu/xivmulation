@@ -36,15 +36,13 @@ impl Apply for DoDirectDamage {
         if let Ok((_, job, _, _, _, _, mut status_effects, stats, mut active_combos)) =
             query.get_mut(source)
         {
-            let mut potency = self.potency;
-            if self.consume_combo(&mut active_combos) {
-                potency = match self.combo_potency {
-                    Some(combo_potency) => combo_potency,
-                    None => panic!(
-                        "Consumed a combo, but no combo_potency is set. This should not happen."
-                    ),
-                }
-            }
+            let potency = if self.consume_combo(&mut active_combos) {
+                self.combo_potency.expect(
+                    "Consumed a combo, but no combo_potency is set. This should not happen.",
+                )
+            } else {
+                self.potency
+            };
             calculated_damage =
                 calc::direct_damage(sim, potency, *job, &stats, self.attack_type, vec![]);
             status_effects.expire_with_flag(StatusFlag::ExpireOnDirectDamage);

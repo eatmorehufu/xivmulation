@@ -16,7 +16,7 @@ impl Default for AttackType {
     }
 }
 
-// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/damage-and-healing/#direct-damage-d
+/// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/damage-and-healing/#direct-damage-d
 pub fn direct_damage(
     sim: &SimState,
     potency: i64,
@@ -57,8 +57,8 @@ pub fn direct_damage(
         .fold(d as f64, |total, multiplier| floor(total * *multiplier, 0)) as i64
 }
 
-// Level 80 F(AP)
-// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#lv-80-fap
+/// Level 80 F(AP)
+/// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#lv-80-fap
 fn attack_power(job: lookup::Job, ap: i64) -> i64 {
     if job.is_tank() {
         // ⌊ 115 · ( AP - 340 ) / 340 ⌋ + 100
@@ -69,8 +69,8 @@ fn attack_power(job: lookup::Job, ap: i64) -> i64 {
     }
 }
 
-// F(DET)
-// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#determination-fdet
+/// F(DET)
+/// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#determination-fdet
 fn determination(det: i64) -> i64 {
     // ⌊ 130 · ( DET - LevelMod Lv, Main )/ LevelMod Lv, DIV + 1000 ⌋
     130 * (det - lookup::level_modifiers(lookup::LevelColumn::MAIN))
@@ -78,8 +78,8 @@ fn determination(det: i64) -> i64 {
         + 1000
 }
 
-// F(TNC)
-// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#tenacity-ftnc
+/// F(TNC)
+/// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#tenacity-ftnc
 fn tenacity(tnc: i64) -> i64 {
     // ⌊ 100 · ( TNC - LevelModLv, SUB )/ LevelModLv, DIV + 1000 ⌋
     100 * (tnc - lookup::level_modifiers(lookup::LevelColumn::SUB))
@@ -87,10 +87,10 @@ fn tenacity(tnc: i64) -> i64 {
         + 1000
 }
 
-// F(WD)
-// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#weapon-damage-fwd
-// Use the WD appropriate for the attack being calculated (eg. Auto-attack = physical damage)
-// All weapons have a Physical and Magical Damage value even though one of them is hidden.
+/// F(WD)
+/// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#weapon-damage-fwd
+/// Use the WD appropriate for the attack being calculated (eg. Auto-attack = physical damage)
+/// All weapons have a Physical and Magical Damage value even though one of them is hidden.
 fn weapon_damage(job: lookup::Job, wd: i64) -> i64 {
     // ⌊ ( LevelModLv, MAIN · JobModJob, Attribute / 1000 ) + WD ⌋
     (lookup::level_modifiers(lookup::LevelColumn::MAIN)
@@ -99,8 +99,8 @@ fn weapon_damage(job: lookup::Job, wd: i64) -> i64 {
         + wd
 }
 
-// P(CHR)
-// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/parameters/#critical-hit-probability
+/// P(CHR)
+/// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/parameters/#critical-hit-probability
 fn critical_hit_rate(chr: i64) -> f64 {
     // ⌊ 200 · ( CHR - LevelModLv, SUB )/ LevelModLv, DIV + 50 ⌋ / 10
     floor(
@@ -127,8 +127,8 @@ fn critical_hit_damage(crit: i64) -> i64 {
         + 1400
 }
 
-// F(CRIT)
-// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#critical-hit-damage-fcrit
+/// F(CRIT)
+/// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/functions/#critical-hit-damage-fcrit
 fn critical_hit(sim: &SimState, crit: i64, crit_percent_override: Option<&i64>) -> i64 {
     if !is_crit(sim, crit, crit_percent_override) {
         return 1000;
@@ -136,8 +136,8 @@ fn critical_hit(sim: &SimState, crit: i64, crit_percent_override: Option<&i64>) 
     critical_hit_damage(crit)
 }
 
-// P(DHR)
-// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/parameters/#pdhr
+/// P(DHR)
+/// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/parameters/#pdhr
 fn direct_hit_rate(dhr: i64) -> f64 {
     // ⌊ 550 · ( DHR - LevelModLv, SUB )/ LevelModLv, DIV ⌋ / 10
     floor(
@@ -233,31 +233,6 @@ mod test {
 
         assert_eq!(true, is_crit(&sim, 0, Some::<&i64>(&51)));
     }
-
-    /*
-    fast blade potency 200
-    6523
-    7026
-
-    6847
-    6753
-    6748
-    6660
-    6732
-    6995
-    6731
-    6981
-    6859
-    6969
-    7006
-    8737?
-    8143?
-    8522?
-    8469?
-    10397!
-    10947!
-    12883!!
-    */
 
     fn get_stats() -> Stats {
         let mut stats = Stats::default();
