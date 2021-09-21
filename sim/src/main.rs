@@ -2,6 +2,7 @@ mod actor;
 mod sim;
 
 use actor::action::{Action, Actions};
+use actor::active_combos::ActiveCombos;
 use actor::apply::{Apply, ApplyCombo, DoDirectDamage, GiveStatusEffect, StartGcd, StartRecast};
 use actor::calc::lookup::Job;
 use actor::damage::Damage;
@@ -11,7 +12,7 @@ use actor::stat::{SpecialStat, Stat, Stats};
 use actor::status_effect::status;
 use actor::status_effect::status::{Status, StatusFlag, StatusFlags};
 use actor::status_effect::{StatusEffect, StatusEffects};
-use actor::{ActiveCombos, Actor, ActorBundle, QueryActor, Target};
+use actor::{ActorBundle, QueryActor, Target};
 use bevy_app::{App, ScheduleRunnerPlugin, ScheduleRunnerSettings};
 use bevy_ecs::prelude::*;
 use bevy_utils::Duration;
@@ -103,7 +104,6 @@ fn setup(mut commands: Commands) {
 
     commands.spawn().insert(SimState::default());
     commands.spawn_bundle((
-        Actor::default(),
         Job::DRG,
         actions,
         rotation,
@@ -115,7 +115,6 @@ fn setup(mut commands: Commands) {
     ));
     commands.spawn_bundle((
         Target::default(),
-        Actor::default(),
         Job::None,
         Actions::default(),
         Rotation::default(),
@@ -177,7 +176,7 @@ fn process_status_effects(sim_state_query: Query<&SimState>, mut actor_query: Qu
         .expect("There should always be exactly one sim state.");
 
     let mut bundles = Vec::<StatusEffectApplyBundle>::default();
-    for (entity, _, _, _, _, _, _, status_effects, _, _) in actor_query.iter_mut() {
+    for (entity, _, _, _, _, _, status_effects, _, _) in actor_query.iter_mut() {
         for effect in status_effects.iter() {
             bundles.push(StatusEffectApplyBundle {
                 status_effect: effect.clone(),
@@ -207,7 +206,7 @@ fn perform_actions(
         .expect("There should always be exactly one sim state.");
     let sim_time = sim.now();
 
-    let (temp_target_entity, _, _, _, _, _, _, _, _, _) = actor_queries
+    let (temp_target_entity, _, _, _, _, _, _, _, _) = actor_queries
         .q0_mut()
         .single_mut()
         .expect("There should always be exactly one sim state.");
@@ -215,7 +214,7 @@ fn perform_actions(
 
     let mut actor_query = actor_queries.q1_mut();
     let mut perform_bundles = Vec::<ActionPerformBundle>::default();
-    for (entity, _, _, actions, rotation, recast_expirations, _, _, _, active_combos) in
+    for (entity, _, actions, rotation, recast_expirations, _, _, _, active_combos) in
         actor_query.iter_mut()
     {
         match rotation.get_next_action_id(sim_time, &recast_expirations, &active_combos) {

@@ -64,7 +64,7 @@ pub struct ModifyStat {
 
 impl Apply for ModifyStat {
     fn apply(&self, _sim: &SimState, query: &mut QueryActor, _source: Entity, target: Entity) {
-        if let Ok((_, _, _, _, _, _, _, _, mut stats, _)) = query.get_mut(target) {
+        if let Ok((_, _, _, _, _, _, _, mut stats, _)) = query.get_mut(target) {
             stats.add(self.stat, self.amount);
         }
     }
@@ -77,7 +77,7 @@ pub struct ModifySpecialStat {
 
 impl Apply for ModifySpecialStat {
     fn apply(&self, _sim: &SimState, query: &mut QueryActor, _source: Entity, target: Entity) {
-        if let Ok((_, _, _, _, _, _, _, _, mut stats, _)) = query.get_mut(target) {
+        if let Ok((_, _, _, _, _, _, _, mut stats, _)) = query.get_mut(target) {
             stats.set_special(self.stat, self.amount);
         }
     }
@@ -87,7 +87,7 @@ pub struct SetCombo(pub u32);
 
 impl Apply for SetCombo {
     fn apply(&self, _sim: &SimState, query: &mut QueryActor, source: Entity, _target: Entity) {
-        if let Ok((_, _, _, _, _, _, _, _, _, mut active_combos)) = query.get_mut(source) {
+        if let Ok((_, _, _, _, _, _, _, _, mut active_combos)) = query.get_mut(source) {
             active_combos.add_action(self.0);
         }
     }

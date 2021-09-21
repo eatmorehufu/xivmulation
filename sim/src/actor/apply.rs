@@ -33,7 +33,7 @@ impl DoDirectDamage {
 impl Apply for DoDirectDamage {
     fn apply(&self, sim: &SimState, query: &mut QueryActor, source: Entity, target: Entity) {
         let calculated_damage;
-        if let Ok((_, _, job, _, _, _, _, mut status_effects, stats, mut active_combos)) =
+        if let Ok((_, job, _, _, _, _, mut status_effects, stats, mut active_combos)) =
             query.get_mut(source)
         {
             let mut potency = self.potency;
@@ -52,7 +52,7 @@ impl Apply for DoDirectDamage {
             panic!("Tried to get stats of a source with no stats.")
         }
 
-        if let Ok((_, _, _, _, _, _, mut damage, _, _, _)) = query.get_mut(target) {
+        if let Ok((_, _, _, _, _, mut damage, _, _, _)) = query.get_mut(target) {
             damage.add(calculated_damage);
         } else {
             panic!("Tried to do damage to a target that has no Damage component.")
@@ -67,7 +67,7 @@ pub struct StartRecast {
 
 impl Apply for StartRecast {
     fn apply(&self, sim: &SimState, query: &mut QueryActor, source: Entity, _target: Entity) {
-        if let Ok((_, _, _, _, _, mut recast_expirations, _, _, _, _)) = query.get_mut(source) {
+        if let Ok((_, _, _, _, mut recast_expirations, _, _, _, _)) = query.get_mut(source) {
             recast_expirations.set(self.action_id, sim.now() + self.duration);
         }
     }
@@ -81,7 +81,7 @@ pub struct GiveStatusEffect {
 impl Apply for GiveStatusEffect {
     fn apply(&self, sim: &SimState, query: &mut QueryActor, source: Entity, target: Entity) {
         let receiver = if self.target_source { source } else { target };
-        if let Ok((_, _, _, _, _, _, _, mut status_effects, _, _)) = query.get_mut(receiver) {
+        if let Ok((_, _, _, _, _, _, mut status_effects, _, _)) = query.get_mut(receiver) {
             status_effects.add(StatusEffect::new(self.status.clone(), source, sim.now()));
         }
     }
@@ -107,7 +107,7 @@ impl Default for StartGcd {
 
 impl Apply for StartGcd {
     fn apply(&self, sim: &SimState, query: &mut QueryActor, source: Entity, _target: Entity) {
-        if let Ok((_, _, _, _, _, mut recast_expirations, _, _, _, _)) = query.get_mut(source) {
+        if let Ok((_, _, _, _, mut recast_expirations, _, _, _, _)) = query.get_mut(source) {
             // TODO: calculate duration with skill speed
             recast_expirations.set_gcd(sim.now() + self.base_duration);
         }
@@ -126,7 +126,7 @@ impl Apply for ApplyCombo {
             effects: vec![Arc::new(SetCombo(self.0))],
             ..Default::default()
         };
-        if let Ok((_, _, _, _, _, _, _, mut status_effects, _, _)) = query.get_mut(source) {
+        if let Ok((_, _, _, _, _, _, mut status_effects, _, _)) = query.get_mut(source) {
             status_effects.add(StatusEffect::new(set_combo, source, sim.now()));
         }
     }
