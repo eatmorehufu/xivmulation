@@ -12,7 +12,7 @@ use actor::stat::{SpecialStat, Stat, Stats};
 use actor::status_effect::status;
 use actor::status_effect::status::{Status, StatusFlag, StatusFlags};
 use actor::status_effect::{StatusEffect, StatusEffects};
-use actor::{ActorBundle, QueryActor, Target};
+use actor::{ActorTuple, QueryActor, Target};
 use bevy_app::{App, ScheduleRunnerPlugin, ScheduleRunnerSettings};
 use bevy_ecs::prelude::*;
 use bevy_utils::Duration;
@@ -199,7 +199,7 @@ struct ActionPerformBundle {
 }
 fn perform_actions(
     sim_state_query: Query<&SimState>,
-    mut actor_queries: QuerySet<(Query<ActorBundle, With<Target>>, QueryActor)>,
+    mut actor_queries: QuerySet<(Query<ActorTuple, With<Target>>, QueryActor)>,
 ) {
     let sim = sim_state_query
         .single()

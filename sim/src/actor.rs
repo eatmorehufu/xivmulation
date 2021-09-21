@@ -18,7 +18,7 @@ use rotation::Rotation;
 use stat::Stats;
 use status_effect::StatusEffects;
 
-pub type ActorBundle = (
+pub type ActorTuple = (
     Entity,
     &'static Job,
     &'static Actions,
@@ -30,7 +30,7 @@ pub type ActorBundle = (
     &'static mut ActiveCombos,
 );
 
-pub type QueryActor<'a> = Query<'a, ActorBundle>;
+pub type QueryActor<'a> = Query<'a, ActorTuple>;
 
 // Enemy indicates that an actor is the target for the simulated actor.
 #[derive(Default)]
