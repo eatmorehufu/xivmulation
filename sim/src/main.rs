@@ -2,12 +2,11 @@ mod actor;
 mod sim;
 
 use actor::action::{Action, Actions};
-use actor::apply::Apply;
-use actor::apply::{ApplyCombo, DoDirectDamage, GiveStatusEffect, StartGcd, StartRecast};
+use actor::apply::{Apply, ApplyCombo, DoDirectDamage, GiveStatusEffect, StartGcd, StartRecast};
 use actor::calc::lookup::Job;
 use actor::damage::Damage;
 use actor::recast_expirations::RecastExpirations;
-use actor::rotation::{Rotation, RotationEntry};
+use actor::rotation::{CheckCombo, Rotation, RotationEntry};
 use actor::stat::{SpecialStat, Stat, Stats};
 use actor::status_effect::status;
 use actor::status_effect::status::{Status, StatusFlag, StatusFlags};
@@ -56,12 +55,6 @@ fn setup(mut commands: Commands) {
                 potency: 290,
                 ..Default::default()
             }),
-            // TODO: Remove recast when we have conditions on rotation entries.
-            // This recast is just here to make the rotation use the other combo move.
-            Arc::new(StartRecast {
-                action_id: 1,
-                duration: 5000,
-            }),
             Arc::new(ApplyCombo("True Thrust")),
             Arc::new(StartGcd::default()),
         ],
@@ -82,8 +75,10 @@ fn setup(mut commands: Commands) {
         ..Default::default()
     };
     // rotation.add(RotationEntry::new(&life_surge));
+    rotation.add(
+        RotationEntry::new(&vorpal_thrust).with_condition(Arc::new(CheckCombo("True Thrust"))),
+    );
     rotation.add(RotationEntry::new(&true_thrust));
-    rotation.add(RotationEntry::new(&vorpal_thrust));
     actions.add(life_surge);
     actions.add(true_thrust);
     actions.add(vorpal_thrust);
@@ -139,19 +134,22 @@ fn tick(mut sim_state_query: Query<&mut SimState>) {
         .single_mut()
         .expect("There should always be exactly one sim state.");
 
-    if sim_state.tick() >= 15000 {
+    let now = sim_state.tick();
+    // TODO: Temporary. Sim 15s for now while in dev.
+    println!("============ Tick: {}", now);
+    if now >= 15000 {
         std::process::exit(0);
     }
 }
 
-fn reset_calculated_components(
-    mut stats_query: Query<&mut Stats>,
-    mut combo_query: Query<&mut ActiveCombos>,
-) {
-    for mut stats in stats_query.iter_mut() {
+fn reset_stats(mut query: Query<&mut Stats>) {
+    for mut stats in query.iter_mut() {
         stats.reset();
     }
-    for mut active_combos in combo_query.iter_mut() {
+}
+
+fn reset_active_combos(mut query: Query<&mut ActiveCombos>) {
+    for mut active_combos in query.iter_mut() {
         active_combos.reset();
     }
 }
@@ -182,7 +180,6 @@ fn process_status_effects(sim_state_query: Query<&SimState>, mut actor_query: Qu
 
     let mut bundles = Vec::<StatusEffectApplyBundle>::default();
     for (entity, _, _, _, _, _, _, status_effects, _, _) in actor_query.iter_mut() {
-        println!("{} status effects", status_effects.len());
         for effect in status_effects.iter() {
             bundles.push(StatusEffectApplyBundle {
                 status_effect: effect.clone(),
@@ -192,10 +189,6 @@ fn process_status_effects(sim_state_query: Query<&SimState>, mut actor_query: Qu
         }
     }
     for bundle in bundles {
-        println!(
-            "{}",
-            format!("Apply status_effect: {:?}", bundle.status_effect)
-        );
         bundle
             .status_effect
             .apply(sim, &mut actor_query, bundle.source, bundle.target);
@@ -224,9 +217,10 @@ fn perform_actions(
 
     let mut actor_query = actor_queries.q1_mut();
     let mut perform_bundles = Vec::<ActionPerformBundle>::default();
-    for (entity, _, _, actions, rotation, recast_expirations, _, _, _, _) in actor_query.iter_mut()
+    for (entity, _, _, actions, rotation, recast_expirations, _, _, _, active_combos) in
+        actor_query.iter_mut()
     {
-        match rotation.get_next_action_id(sim_time, &recast_expirations) {
+        match rotation.get_next_action_id(sim_time, &recast_expirations, &active_combos) {
             Some(action_id) => match actions.get(&action_id) {
                 Some(action) => perform_bundles.push(ActionPerformBundle {
                     action: action.clone(),
@@ -241,7 +235,7 @@ fn perform_actions(
 
     for bundle in perform_bundles {
         println!(
-            "===== {}s {} =====",
+            ">>>> ACTION [{}s]: {}",
             sim_time as f64 / 1000.0,
             bundle.action.name
         );
@@ -254,15 +248,43 @@ fn perform_actions(
     }
 }
 
+#[derive(Debug, Hash, Eq, PartialEq, Clone, SystemLabel)]
+enum SimLabel {
+    Tick,
+    Setup,
+    Calculate,
+    Execute,
+}
+
 fn main() {
     App::build()
         .insert_resource(ScheduleRunnerSettings::run_loop(Duration::new(0, 0)))
         .add_plugin(ScheduleRunnerPlugin::default())
         .add_startup_system(setup.system())
-        .add_system(tick.system())
-        .add_system(reset_calculated_components.system())
-        .add_system(remove_expired_status_effects.system())
-        .add_system(process_status_effects.system())
-        .add_system(perform_actions.system())
+        .add_system_set(
+            SystemSet::new()
+                .label(SimLabel::Tick)
+                .with_system(tick.system()),
+        )
+        .add_system_set(
+            SystemSet::new()
+                .label(SimLabel::Setup)
+                .with_system(reset_stats.system())
+                .with_system(reset_active_combos.system())
+                .with_system(remove_expired_status_effects.system())
+                .after(SimLabel::Tick),
+        )
+        .add_system_set(
+            SystemSet::new()
+                .label(SimLabel::Calculate)
+                .with_system(process_status_effects.system())
+                .after(SimLabel::Setup),
+        )
+        .add_system_set(
+            SystemSet::new()
+                .label(SimLabel::Execute)
+                .with_system(perform_actions.system())
+                .after(SimLabel::Calculate),
+        )
         .run();
 }
