@@ -8,11 +8,11 @@ pub trait Check {
     fn check(&self, active_combos: &ActiveCombos) -> bool;
 }
 
-pub struct CheckCombo(pub &'static str);
+pub struct CheckCombo(pub u32);
 
 impl Check for CheckCombo {
     fn check(&self, active_combos: &ActiveCombos) -> bool {
-        active_combos.has_action(self.0)
+        active_combos.has_action(&self.0)
     }
 }
 
@@ -119,20 +119,18 @@ mod tests {
         let true_thrust = Action {
             id: 1,
             name: "True Thrust",
-            results: vec![Arc::new(ApplyCombo("True Thrust"))],
+            results: vec![Arc::new(ApplyCombo(1))],
             ..Default::default()
         };
         let mut rotation = Rotation::default();
-        rotation.add(
-            RotationEntry::new(&vorpal_thrust).with_condition(Arc::new(CheckCombo("True Thrust"))),
-        );
+        rotation.add(RotationEntry::new(&vorpal_thrust).with_condition(Arc::new(CheckCombo(1))));
         rotation.add(RotationEntry::new(&true_thrust));
 
         let recast_expirations = RecastExpirations::default();
         let mut active_combos = ActiveCombos::default();
         let id = rotation.get_next_action_id(0, &recast_expirations, &active_combos);
         assert_eq!(1, id.unwrap());
-        active_combos.add_action("True Thrust");
+        active_combos.add_action(1);
         let id = rotation.get_next_action_id(0, &recast_expirations, &active_combos);
         assert_eq!(2, id.unwrap());
     }

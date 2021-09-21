@@ -83,7 +83,7 @@ impl Apply for ModifySpecialStat {
     }
 }
 
-pub struct SetCombo(pub &'static str);
+pub struct SetCombo(pub u32);
 
 impl Apply for SetCombo {
     fn apply(&self, _sim: &SimState, query: &mut QueryActor, source: Entity, _target: Entity) {

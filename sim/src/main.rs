@@ -55,7 +55,7 @@ fn setup(mut commands: Commands) {
                 potency: 290,
                 ..Default::default()
             }),
-            Arc::new(ApplyCombo("True Thrust")),
+            Arc::new(ApplyCombo(1)),
             Arc::new(StartGcd::default()),
         ],
         ..Default::default()
@@ -67,17 +67,15 @@ fn setup(mut commands: Commands) {
             Arc::new(DoDirectDamage {
                 potency: 140,
                 combo_potency: Some(350),
-                combo_action_name: Some("True Thrust"),
+                combo_action_id: Some(1),
                 ..Default::default()
             }),
             Arc::new(StartGcd::default()),
         ],
         ..Default::default()
     };
-    // rotation.add(RotationEntry::new(&life_surge));
-    rotation.add(
-        RotationEntry::new(&vorpal_thrust).with_condition(Arc::new(CheckCombo("True Thrust"))),
-    );
+    rotation.add(RotationEntry::new(&life_surge));
+    rotation.add(RotationEntry::new(&vorpal_thrust).with_condition(Arc::new(CheckCombo(1))));
     rotation.add(RotationEntry::new(&true_thrust));
     actions.add(life_surge);
     actions.add(true_thrust);

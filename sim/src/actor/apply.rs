@@ -13,16 +13,16 @@ pub trait Apply {
 #[derive(Default)]
 pub struct DoDirectDamage {
     pub potency: i64,
-    pub combo_action_name: Option<&'static str>,
+    pub combo_action_id: Option<u32>,
     pub combo_potency: Option<i64>,
     pub attack_type: calc::AttackType,
 }
 
 impl DoDirectDamage {
     fn consume_combo(&self, active_combos: &mut ActiveCombos) -> bool {
-        if let Some(action_name) = self.combo_action_name {
-            if active_combos.has_action(action_name) {
-                active_combos.remove_action(action_name);
+        if let Some(action_id) = self.combo_action_id {
+            if active_combos.has_action(&action_id) {
+                active_combos.remove_action(&action_id);
                 return true;
             }
         }
@@ -114,7 +114,7 @@ impl Apply for StartGcd {
     }
 }
 
-pub struct ApplyCombo(pub &'static str);
+pub struct ApplyCombo(pub u32);
 
 impl Apply for ApplyCombo {
     fn apply(&self, sim: &SimState, query: &mut QueryActor, source: Entity, _target: Entity) {
@@ -140,16 +140,16 @@ mod tests {
         let ddd = DoDirectDamage {
             potency: 100,
             combo_potency: Some(200),
-            combo_action_name: Some("consumed"),
+            combo_action_id: Some(1),
             ..Default::default()
         };
         let mut active_combos = ActiveCombos::default();
-        active_combos.add_action("not consumed");
+        active_combos.add_action(2);
         assert_eq!(false, ddd.consume_combo(&mut active_combos));
-        active_combos.add_action("consumed");
+        active_combos.add_action(1);
         assert_eq!(true, ddd.consume_combo(&mut active_combos));
         assert_eq!(false, ddd.consume_combo(&mut active_combos));
-        assert_eq!(true, active_combos.has_action("not consumed"));
-        assert_eq!(false, active_combos.has_action("consumed"));
+        assert_eq!(true, active_combos.has_action(&2));
+        assert_eq!(false, active_combos.has_action(&1));
     }
 }
