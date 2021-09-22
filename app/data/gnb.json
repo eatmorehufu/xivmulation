@@ -1,0 +1,299 @@
+[
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7531,
+        "Icon": "/i/000000/000801.png",
+        "Name": "Rampart",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7533,
+        "Icon": "/i/000000/000803.png",
+        "Name": "Provoke",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 2,
+        "DescriptionJSON": null,
+        "ID": 7535,
+        "Icon": "/i/000000/000806.png",
+        "Name": "Reprisal",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7537,
+        "Icon": "/i/000000/000810.png",
+        "Name": "Shirk",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7538,
+        "Icon": "/i/000000/000808.png",
+        "Name": "Interject",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7540,
+        "Icon": "/i/000000/000802.png",
+        "Name": "Low Blow",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7548,
+        "Icon": "/i/000000/000822.png",
+        "Name": "Arm's Length",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16137,
+        "Icon": "/i/003000/003401.png",
+        "Name": "Keen Edge",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16138,
+        "Icon": "/i/003000/003402.png",
+        "Name": "No Mercy",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 16137,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16139,
+        "Icon": "/i/003000/003403.png",
+        "Name": "Brutal Shell",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16140,
+        "Icon": "/i/003000/003404.png",
+        "Name": "Camouflage",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 2,
+        "DescriptionJSON": null,
+        "ID": 16141,
+        "Icon": "/i/003000/003405.png",
+        "Name": "Demon Slice",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16142,
+        "Icon": "/i/003000/003406.png",
+        "Name": "Royal Guard",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16143,
+        "Icon": "/i/003000/003407.png",
+        "Name": "Lightning Shot",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16144,
+        "Icon": "/i/003000/003408.png",
+        "Name": "Danger Zone",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 16139,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16145,
+        "Icon": "/i/003000/003409.png",
+        "Name": "Solid Barrel",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16146,
+        "Icon": "/i/003000/003410.png",
+        "Name": "Gnashing Fang",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 16146,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16147,
+        "Icon": "/i/003000/003411.png",
+        "Name": "Savage Claw",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16148,
+        "Icon": "/i/003000/003412.png",
+        "Name": "Nebula",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 16141,
+        "CastType": 2,
+        "DescriptionJSON": null,
+        "ID": 16149,
+        "Icon": "/i/003000/003413.png",
+        "Name": "Demon Slaughter",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 16147,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16150,
+        "Icon": "/i/003000/003414.png",
+        "Name": "Wicked Talon",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16151,
+        "Icon": "/i/003000/003415.png",
+        "Name": "Aurora",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16152,
+        "Icon": "/i/003000/003416.png",
+        "Name": "Superbolide",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16153,
+        "Icon": "/i/003000/003417.png",
+        "Name": "Sonic Break",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16154,
+        "Icon": "/i/003000/003418.png",
+        "Name": "Rough Divide",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16155,
+        "Icon": "/i/003000/003419.png",
+        "Name": "Continuation",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 2,
+        "DescriptionJSON": null,
+        "ID": 16159,
+        "Icon": "/i/003000/003423.png",
+        "Name": "Bow Shock",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 2,
+        "DescriptionJSON": null,
+        "ID": 16160,
+        "Icon": "/i/003000/003424.png",
+        "Name": "Heart of Light",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16161,
+        "Icon": "/i/003000/003425.png",
+        "Name": "Heart of Stone",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16162,
+        "Icon": "/i/003000/003426.png",
+        "Name": "Burst Strike",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 2,
+        "DescriptionJSON": null,
+        "ID": 16163,
+        "Icon": "/i/003000/003427.png",
+        "Name": "Fated Circle",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16164,
+        "Icon": "/i/003000/003428.png",
+        "Name": "Bloodfest",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16165,
+        "Icon": "/i/003000/003429.png",
+        "Name": "Blasting Zone",
+        "PreservesCombo": 1
+    }
+]

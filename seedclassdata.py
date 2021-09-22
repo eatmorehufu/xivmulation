@@ -4,7 +4,7 @@ import copy
 import urllib.parse
 
 # TODO: Add more jobs eventually
-JOBS = ['PLD']
+JOBS = ['PLD', 'DRG', 'GNB']
 XIVAPI_SEARCH_URL = 'https://xivapi.com/search?'
 SEARCH_FILTERS = [
     'IsPvP=0,ActionCategory.ID>=2',
@@ -14,7 +14,7 @@ SEARCH_FILTERS = [
 # TODO: Will need more columns than just this, like cast times.
 # NOTE: The DescriptionJson has conditionals for player levels, but will omit some
 # resource gain information.
-COLUMNS = ['ID', 'Name', 'Icon', 'Description']
+COLUMNS = ['ID', 'Name', 'Icon', 'DescriptionJSON', 'ActionComboTargetID', 'PreservesCombo', 'CastType']
 SEARCH_VARS = {
     'indexes': 'Action',
     'columns': ','.join(COLUMNS)
@@ -37,5 +37,5 @@ for job in JOBS:
     print('Requesting %s' % request_url)
     response = requests.get(request_url)
     data = response.json()['Results']
-    with open('app/data/' + '%s.json' % job, 'w') as outfile:
-        json.dump(data, outfile)
+    with open('app/data/' + '%s.json' % job.lower(), 'w') as outfile:
+        json.dump(data, outfile, indent=4)

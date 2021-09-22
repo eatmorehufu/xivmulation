@@ -1,0 +1,272 @@
+[
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 75,
+        "Icon": "/i/000000/000310.png",
+        "Name": "True Thrust",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 75,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 78,
+        "Icon": "/i/000000/000312.png",
+        "Name": "Vorpal Thrust",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 83,
+        "Icon": "/i/000000/000304.png",
+        "Name": "Life Surge",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 78,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 84,
+        "Icon": "/i/000000/000314.png",
+        "Name": "Full Thrust",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 85,
+        "Icon": "/i/000000/000309.png",
+        "Name": "Lance Charge",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 4,
+        "DescriptionJSON": null,
+        "ID": 86,
+        "Icon": "/i/000000/000306.png",
+        "Name": "Doom Spike",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 75,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 87,
+        "Icon": "/i/000000/000317.png",
+        "Name": "Disembowel",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 87,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 88,
+        "Icon": "/i/000000/000308.png",
+        "Name": "Chaos Thrust",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 90,
+        "Icon": "/i/000000/000315.png",
+        "Name": "Piercing Talon",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 92,
+        "Icon": "/i/002000/002576.png",
+        "Name": "Jump",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 94,
+        "Icon": "/i/002000/002577.png",
+        "Name": "Elusive Jump",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 95,
+        "Icon": "/i/002000/002580.png",
+        "Name": "Spineshatter Dive",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 2,
+        "DescriptionJSON": null,
+        "ID": 96,
+        "Icon": "/i/002000/002578.png",
+        "Name": "Dragonfire Dive",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 3553,
+        "Icon": "/i/002000/002581.png",
+        "Name": "Blood of the Dragon",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 3554,
+        "Icon": "/i/002000/002582.png",
+        "Name": "Fang and Claw",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 4,
+        "DescriptionJSON": null,
+        "ID": 3555,
+        "Icon": "/i/002000/002583.png",
+        "Name": "Geirskogul",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 3556,
+        "Icon": "/i/002000/002584.png",
+        "Name": "Wheeling Thrust",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 2,
+        "DescriptionJSON": null,
+        "ID": 3557,
+        "Icon": "/i/002000/002585.png",
+        "Name": "Battle Litany",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 86,
+        "CastType": 4,
+        "DescriptionJSON": null,
+        "ID": 7397,
+        "Icon": "/i/002000/002586.png",
+        "Name": "Sonic Thrust",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7398,
+        "Icon": "/i/002000/002587.png",
+        "Name": "Dragon Sight",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7399,
+        "Icon": "/i/002000/002588.png",
+        "Name": "Mirage Dive",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7541,
+        "Icon": "/i/000000/000821.png",
+        "Name": "Second Wind",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7542,
+        "Icon": "/i/000000/000823.png",
+        "Name": "Bloodbath",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7546,
+        "Icon": "/i/000000/000830.png",
+        "Name": "True North",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7548,
+        "Icon": "/i/000000/000822.png",
+        "Name": "Arm's Length",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7549,
+        "Icon": "/i/000000/000828.png",
+        "Name": "Feint",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 7863,
+        "Icon": "/i/000000/000824.png",
+        "Name": "Leg Sweep",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 7397,
+        "CastType": 4,
+        "DescriptionJSON": null,
+        "ID": 16477,
+        "Icon": "/i/002000/002590.png",
+        "Name": "Coerthan Torment",
+        "PreservesCombo": 0
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 1,
+        "DescriptionJSON": null,
+        "ID": 16478,
+        "Icon": "/i/002000/002591.png",
+        "Name": "High Jump",
+        "PreservesCombo": 1
+    },
+    {
+        "ActionComboTargetID": 0,
+        "CastType": 2,
+        "DescriptionJSON": null,
+        "ID": 16480,
+        "Icon": "/i/002000/002593.png",
+        "Name": "Stardiver",
+        "PreservesCombo": 1
+    }
+]
