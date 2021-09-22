@@ -1,308 +1,410 @@
 [
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 200.",
         "ID": 9,
         "Icon": "/i/000000/000158.png",
         "Name": "Fast Blade",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 9,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 100.\n\n<span style=\"color:#00cc22;\">Combo Action:</span> <span style=\"color:#ff7b1a;\">Fast Blade</span>\n\n<span style=\"color:#00cc22;\">Combo Potency:</span> 300 <br />\n<span style=\"color:#00cc22;\">Combo Bonus:</span> Restores MP",
         "ID": 15,
         "Icon": "/i/000000/000156.png",
         "Name": "Riot Blade",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 110.\n\n<span style=\"color:#00cc22;\">Additional Effect:</span> <span style=\"color:#ffff66;\">Stun</span>\n\n<span style=\"color:#00cc22;\">Duration:</span> 6s",
         "ID": 16,
         "Icon": "/i/000000/000154.png",
         "Name": "Shield Bash",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Reduces damage taken by 30%.\n\n<span style=\"color:#00cc22;\">Duration:</span> 15s",
         "ID": 17,
         "Icon": "/i/000000/000151.png",
         "Name": "Sentinel",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 1200
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Increases physical damage dealt by 25%.\n\n<span style=\"color:#00cc22;\">Duration:</span> 25s",
         "ID": 20,
         "Icon": "/i/000000/000166.png",
         "Name": "Fight or Flight",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 600
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 15,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 100.\n\n<span style=\"color:#00cc22;\">Combo Action:</span> <span style=\"color:#ff7b1a;\">Riot Blade</span>\n\n<span style=\"color:#00cc22;\">Combo Potency:</span> 350",
         "ID": 21,
         "Icon": "/i/000000/000155.png",
         "Name": "Rage of Halone",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 2,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 120 to all nearby enemies.\n\n<span style=\"color:#00cc22;\">Additional Effect:</span> Damage over time\n\n<span style=\"color:#00cc22;\">Potency:</span> 35\n\n<span style=\"color:#00cc22;\">Duration:</span> 15s",
         "ID": 23,
         "Icon": "/i/000000/000161.png",
         "Name": "Circle of Scorn",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 250
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers a ranged attack with a potency of 120.\n\n<span style=\"color:#00cc22;\">Additional Effect:</span> Increased enmity",
         "ID": 24,
         "Icon": "/i/000000/000164.png",
         "Name": "Shield Lob",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Take all damage intended for another party member.\n\n<span style=\"color:#00cc22;\">Duration:</span> 12s\n\n<span style=\"color:#00cc22;\">Oath Gauge Cost: </span>50\n\nCan only be executed when member is closer than 10 yalms. Does not activate with certain attacks.",
         "ID": 27,
         "Icon": "/i/002000/002501.png",
         "Name": "Cover",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 1200
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Significantly increases enmity generation.\n\nEffect ends upon reuse.",
         "ID": 28,
         "Icon": "/i/002000/002505.png",
         "Name": "Iron Will",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 100
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 100.\n\nPotency increases up to 370 as own HP nears maximum. <br />\n<span style=\"color:#00cc22;\">Additional Effect: </span>Restores MP",
         "ID": 29,
         "Icon": "/i/002000/002503.png",
         "Name": "Spirits Within",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 300
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Renders you impervious to most attacks.\n\n<span style=\"color:#00cc22;\">Duration:</span> 10s",
         "ID": 30,
         "Icon": "/i/002000/002502.png",
         "Name": "Hallowed Ground",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 4200
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 15,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 100.\n\n<span style=\"color:#00cc22;\">Combo Action:</span> <span style=\"color:#ff7b1a;\">Riot Blade</span>\n\n<span style=\"color:#00cc22;\">Combo Potency:</span> 390\n\n<span style=\"color:#00cc22;\">Combo Bonus:</span> Damage over time\n\n<span style=\"color:#00cc22;\">Potency:</span> 85\n\n<span style=\"color:#00cc22;\">Duration:</span> 21s",
         "ID": 3538,
         "Icon": "/i/002000/002506.png",
         "Name": "Goring Blade",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 15,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 100.\n\n<span style=\"color:#00cc22;\">Combo Action:</span> <span style=\"color:#ff7b1a;\">Riot Blade</span>\n\n<span style=\"color:#00cc22;\">Combo Potency:</span> 550 <br />\n<span style=\"color:#00cc22;\">Combo Bonus: </span>Grants 3 stacks of <span style=\"color:#ffff66;\">Sword Oath</span><br />\n<br />\n<span style=\"color:#00cc22;\">Duration: </span>15s",
         "ID": 3539,
         "Icon": "/i/002000/002507.png",
         "Name": "Royal Authority",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Upon HP recovery via healing magic cast by self or a party member, a protective barrier is cast on all party members within a radius of 15 yalms.\n\n<span style=\"color:#00cc22;\">Duration:</span> 30s\n\n<span style=\"color:#00cc22;\">Barrier Effect:</span> Prevents damage up to 10% of your maximum HP\n\n<span style=\"color:#00cc22;\">Duration:</span> 30s\n\nEffect ends upon additional HP recovery via healing magic.",
         "ID": 3540,
         "Icon": "/i/002000/002508.png",
         "Name": "Divine Veil",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 900
     },
     {
+        "ActionCategoryTargetID": 2,
         "ActionComboTargetID": 0,
+        "Cast100ms": 15,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Restores target's HP.\n\n<span style=\"color:#00cc22;\">Cure Potency:</span> 1,200\n\n<span style=\"color:#00cc22;\">Additional Effect:</span> Restores to self 50% of HP restored to target if target is a party member",
         "ID": 3541,
         "Icon": "/i/002000/002509.png",
         "Name": "Clemency",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Block incoming attacks.\n\n<span style=\"color:#00cc22;\">Duration:</span> 6 s\n\n<span style=\"color:#00cc22;\">Oath Gauge Cost:</span> 50",
         "ID": 3542,
         "Icon": "/i/002000/002510.png",
         "Name": "Sheltron",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 50
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 2,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 120 to all nearby enemies.",
         "ID": 7381,
         "Icon": "/i/002000/002511.png",
         "Name": "Total Eclipse",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Reduces target party member's damage taken by 10%.\n\n<span style=\"color:#00cc22;\">Duration:</span> 6s\n\n<span style=\"color:#00cc22;\">Additional Effect:</span> Increases damage reduction by another 50% of the effect of <span style=\"color:#ffff66;\">Rampart</span> or <span style=\"color:#ffff66;\">Sentinel</span> if either are active\n\n<span style=\"color:#00cc22;\">Oath Gauge Cost:</span> 50",
         "ID": 7382,
         "Icon": "/i/002000/002512.png",
         "Name": "Intervention",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 100
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Deals unaspected damage with a potency of 150. Potency increases up to 550 as MP nears maximum.\n\n<span style=\"color:#00cc22;\">Additional Effect:</span> Increases attack magic and healing magic potency by 50% if current MP is at 80% or higher , and allows spells to be cast immediately <span style=\"color:#00cc22;\">Duration:</span> 12s",
         "ID": 7383,
         "Icon": "/i/002000/002513.png",
         "Name": "Requiescat",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 600
     },
     {
+        "ActionCategoryTargetID": 2,
         "ActionComboTargetID": 0,
+        "Cast100ms": 15,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Deals unaspected damage with a potency of 350.",
         "ID": 7384,
         "Icon": "/i/002000/002514.png",
         "Name": "Holy Spirit",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 7,
-        "DescriptionJSON": null,
+        "Description": "Increases block rate to 100% and creates a designated area in a cone behind you in which party members will only suffer 85% of all damage inflicted.\n\n<span style=\"color:#00cc22;\">Duration:</span> 18s\n\nEffect ends upon using another action or moving (including facing a different direction).\n\nCancels auto-attack upon execution.",
         "ID": 7385,
         "Icon": "/i/002000/002515.png",
         "Name": "Passage of Arms",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 1200
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Reduces damage taken by 20%.\n\n<span style=\"color:#00cc22;\">Duration:</span> 20s",
         "ID": 7531,
         "Icon": "/i/000000/000801.png",
         "Name": "Rampart",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 900
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Gesture threateningly, placing yourself at the top of a target's enmity list while gaining additional enmity.",
         "ID": 7533,
         "Icon": "/i/000000/000803.png",
         "Name": "Provoke",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 300
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 2,
-        "DescriptionJSON": null,
+        "Description": "Reduces damage dealt by nearby enemies by 10%.\n\n<span style=\"color:#00cc22;\">Duration:</span> 10s",
         "ID": 7535,
         "Icon": "/i/000000/000806.png",
         "Name": "Reprisal",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 600
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Diverts 25% of enmity to target party member.",
         "ID": 7537,
         "Icon": "/i/000000/000810.png",
         "Name": "Shirk",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 1200
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Interrupts the use of a target's action.",
         "ID": 7538,
         "Icon": "/i/000000/000808.png",
         "Name": "Interject",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 300
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Stuns target.\n\n<span style=\"color:#00cc22;\">Duration:</span> 5s",
         "ID": 7540,
         "Icon": "/i/000000/000802.png",
         "Name": "Low Blow",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 250
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Creates a barrier nullifying most knockback and draw-in effects.\n\n<span style=\"color:#00cc22;\">Duration:</span> 6s\n\n<span style=\"color:#00cc22;\">Additional Effect:</span> <span style=\"color:#ffff66;\">Slow</span> +20% when barrier is struck\n\n<span style=\"color:#00cc22;\">Duration:</span> 15s",
         "ID": 7548,
         "Icon": "/i/000000/000822.png",
         "Name": "Arm's Length",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 1200
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 7381,
+        "Cast100ms": 0,
         "CastType": 2,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 100 to all nearby enemies.\n\n<span style=\"color:#00cc22;\">Combo Action: </span><span style=\"color:#ff7b1a;\">Total Eclipse</span>\n\n<span style=\"color:#00cc22;\">Combo Potency: </span>220 <br />\n<span style=\"color:#00cc22;\">Combo Bonus: </span>Restores MP",
         "ID": 16457,
         "Icon": "/i/002000/002516.png",
         "Name": "Prominence",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 2,
         "ActionComboTargetID": 0,
+        "Cast100ms": 15,
         "CastType": 2,
-        "DescriptionJSON": null,
+        "Description": "Deals unaspected damage with a potency of 250 to all nearby enemies.",
         "ID": 16458,
         "Icon": "/i/002000/002517.png",
         "Name": "Holy Circle",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 2,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 2,
-        "DescriptionJSON": null,
+        "Description": "Deals unaspected damage with a potency of 800 to target and all enemies nearby it.\n\nCan only be executed while under the effect of <span style=\"color:#ffff66;\">Requiescat</span>. Effect fades upon execution.",
         "ID": 16459,
         "Icon": "/i/002000/002518.png",
         "Name": "Confiteor",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 550.\n\n<span style=\"color:#00cc22;\">Additional Effect: </span>Restores MP\n\nCan only be executed while under the effect of <span style=\"color:#ffff66;\">Sword Oath</span>.",
         "ID": 16460,
         "Icon": "/i/002000/002519.png",
         "Name": "Atonement",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Rushes target and delivers an attack with a potency of 200.\n\n<span style=\"color:#00cc22;\">Maximum Charges: </span>2\n\nCannot be executed while bound.",
         "ID": 16461,
         "Icon": "/i/002000/002520.png",
         "Name": "Intervene",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 300
     }
 ]

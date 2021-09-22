@@ -1,272 +1,362 @@
 [
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 290 . <br />\n<br />\n<br />\n\u203bAction changes to <span style=\"color:#ff7b1a;\">Raiden Thrust</span> when <span style=\"color:#ffff66;\">Raiden Thrust Ready</span>.",
         "ID": 75,
         "Icon": "/i/000000/000310.png",
         "Name": "True Thrust",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 75,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 140 .\n\n<span style=\"color:#00cc22;\">Combo Action:</span> <span style=\"color:#ff7b1a;\">True Thrust</span>\n\n<span style=\"color:#00cc22;\">Combo Potency:</span> 350",
         "ID": 78,
         "Icon": "/i/000000/000312.png",
         "Name": "Vorpal Thrust",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Ensures critical damage for first weaponskill used while <span style=\"color:#ffff66;\">Life Surge</span> is active.\n\n<span style=\"color:#00cc22;\">Duration:</span> 5s\n\nEffect cannot be applied to damage over time.\n\n<span style=\"color:#00cc22;\">Additional Effect: </span>Absorbs a portion of damage dealt as HP",
         "ID": 83,
         "Icon": "/i/000000/000304.png",
         "Name": "Life Surge",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 450
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 78,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 100.\n\n<span style=\"color:#00cc22;\">Combo Action:</span> <span style=\"color:#ff7b1a;\">Vorpal Thrust</span>\n\n<span style=\"color:#00cc22;\">Combo Potency:</span> 530 <br />\n<span style=\"color:#00cc22;\">Combo Bonus: </span>Grants <span style=\"color:#ffff66;\">Sharper Fang and Claw</span> if under the effect of",
         "ID": 84,
         "Icon": "/i/000000/000314.png",
         "Name": "Full Thrust",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Increases damage dealt by 15%.\n\n<span style=\"color:#00cc22;\">Duration:</span> 20s",
         "ID": 85,
         "Icon": "/i/000000/000309.png",
         "Name": "Lance Charge",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 900
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 4,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 170 to all enemies in a straight line before you.",
         "ID": 86,
         "Icon": "/i/000000/000306.png",
         "Name": "Doom Spike",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 75,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 150 .\n\n<span style=\"color:#00cc22;\">Combo Action:</span> <span style=\"color:#ff7b1a;\">True Thrust</span>\n\n<span style=\"color:#00cc22;\">Combo Potency:</span> 320 <span style=\"color:#00cc22;\">Combo Bonus:</span> Increases damage dealt by 10%\n\n<span style=\"color:#00cc22;\">Duration:</span> 30s",
         "ID": 87,
         "Icon": "/i/000000/000317.png",
         "Name": "Disembowel",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 87,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 100.\n\n140 when executed from a target's rear.\n\n<span style=\"color:#00cc22;\">Combo Action:</span> <span style=\"color:#ff7b1a;\">Disembowel</span>\n\n<span style=\"color:#00cc22;\">Combo Potency:</span> 290\n\n<span style=\"color:#00cc22;\">Rear Combo Potency:</span> 330\n\n<span style=\"color:#00cc22;\">Combo Bonus:</span> Damage over time\n\n<span style=\"color:#00cc22;\">Potency:</span> 50\n\n<span style=\"color:#00cc22;\">Duration:</span> 24s <br />\n<span style=\"color:#00cc22;\">Combo Bonus: </span>Grants <span style=\"color:#ffff66;\">Enhanced Wheeling Thrust</span> if under the effect of",
         "ID": 88,
         "Icon": "/i/000000/000308.png",
         "Name": "Chaos Thrust",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers a ranged attack with a potency of 150.",
         "ID": 90,
         "Icon": "/i/000000/000315.png",
         "Name": "Piercing Talon",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers a jumping attack with a potency of 310. Returns you to your original position after the attack is made. <span style=\"color:#00cc22;\">Additional Effect: </span>Grants <span style=\"color:#ffff66;\">Dive Ready</span><br />\n<br />\n<span style=\"color:#00cc22;\">Duration: </span>15s<br />\n<br />\n Cannot be executed while bound.",
         "ID": 92,
         "Icon": "/i/002000/002576.png",
         "Name": "Jump",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 300
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Executes a jump to a location 15 yalms behind you.\n\nCannot be executed while bound.",
         "ID": 94,
         "Icon": "/i/002000/002577.png",
         "Name": "Elusive Jump",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 300
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers a jumping attack with a potency of 240.\n\nCannot be executed while bound.",
         "ID": 95,
         "Icon": "/i/002000/002580.png",
         "Name": "Spineshatter Dive",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 600
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 2,
-        "DescriptionJSON": null,
+        "Description": "Delivers a jumping fire-based attack with a potency of 380 to target and all enemies nearby it.\n\nCannot be executed while bound.",
         "ID": 96,
         "Icon": "/i/002000/002578.png",
         "Name": "Dragonfire Dive",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 1200
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Increases potency of <span style=\"color:#ff7b1a;\">High Jump</span> and <span style=\"color:#ff7b1a;\">Spineshatter Dive</span> by 30%.<br />\n<br />\n<span style=\"color:#00cc22;\">Duration:</span>  <br />\n<span style=\"color:#00cc22;\">Additional Effect:</span> Grants <span style=\"color:#ffff66;\">Sharper Fang and Claw</span> upon successfully executing <span style=\"color:#ff7b1a;\">Full Thrust</span>, or <span style=\"color:#ffff66;\">Enhanced Wheeling Thrust</span> upon successfully executing <span style=\"color:#ff7b1a;\">Chaos Thrust</span><br />\n<br />\n<span style=\"color:#00cc22;\">Duration:</span> 10s<br />\n<br />\nEffects end upon use or upon using a weaponskill other than <span style=\"color:#ff7b1a;\">Fang and Claw</span> or <span style=\"color:#ff7b1a;\">Wheeling Thrust</span>. <br />\nCannot be executed while under the effect of <span style=\"color:#ffff66;\">Life of the Dragon</span>.",
         "ID": 3553,
         "Icon": "/i/002000/002581.png",
         "Name": "Blood of the Dragon",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 250
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 340.\n\n380 when executed from a target's flank.\n\nCan only be executed while under the effects of <span style=\"color:#ffff66;\">Sharper Fang and Claw</span> and either <span style=\"color:#ffff66;\">Blood of the Dragon</span> or <span style=\"color:#ffff66;\">Life of the Dragon</span> .\n\n<span style=\"color:#00cc22;\">Additional Effect:</span> Extends <span style=\"color:#ffff66;\">Blood of the Dragon</span> duration by 10s to a maximum of 30s",
         "ID": 3554,
         "Icon": "/i/002000/002582.png",
         "Name": "Fang and Claw",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 4,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 300 to all enemies in a straight line before you.\n\nCan only be executed while under the effect of <span style=\"color:#ffff66;\">Blood of the Dragon</span>. <br />\n<span style=\"color:#00cc22;\">Additional Effect:</span> Changes <span style=\"color:#ffff66;\">Blood of the Dragon</span> to <span style=\"color:#ffff66;\">Life of the Dragon</span> while under the full gaze of the first brood<br />\n<br />\n<br />\n<br />\n\u203bAction changes to <span style=\"color:#ff7b1a;\">Nastrond</span> while under the effect of <span style=\"color:#ffff66;\">Life of the Dragon</span>.",
         "ID": 3555,
         "Icon": "/i/002000/002583.png",
         "Name": "Geirskogul",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 300
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 340.\n\n380 when executed from a target's rear.\n\nCan only be executed while under the effects of <span style=\"color:#ffff66;\">Enhanced Wheeling Thrust</span> and either <span style=\"color:#ffff66;\">Blood of the Dragon</span> or <span style=\"color:#ffff66;\">Life of the Dragon</span> .\n\n<span style=\"color:#00cc22;\">Additional Effect:</span> Extends <span style=\"color:#ffff66;\">Blood of the Dragon</span> duration by 10s to a maximum of 30s",
         "ID": 3556,
         "Icon": "/i/002000/002584.png",
         "Name": "Wheeling Thrust",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 2,
-        "DescriptionJSON": null,
+        "Description": "Increases critical hit rate of self and nearby party members by 10%.\n\n<span style=\"color:#00cc22;\">Duration:</span> 20s",
         "ID": 3557,
         "Icon": "/i/002000/002585.png",
         "Name": "Battle Litany",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 1800
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 86,
+        "Cast100ms": 0,
         "CastType": 4,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 100 to all enemies in a straight line before you.\n\n<span style=\"color:#00cc22;\">Combo Action:</span> <span style=\"color:#ff7b1a;\">Doom Spike</span>\n\n<span style=\"color:#00cc22;\">Combo Potency:</span> 200\n\n<span style=\"color:#00cc22;\">Combo Bonus:</span> Extends <span style=\"color:#ffff66;\">Blood of the Dragon</span> duration by 10s to a maximum of 30s",
         "ID": 7397,
         "Icon": "/i/002000/002586.png",
         "Name": "Sonic Thrust",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Grants <span style=\"color:#ffff66;\">Right Eye</span> to self, increasing damage dealt by 10%. Also grants target party member <span style=\"color:#ffff66;\">Left Eye</span>, increasing damage dealt by 5% as long as target remains within 12 yalms.\n\n<span style=\"color:#00cc22;\">Duration: </span>20s",
         "ID": 7398,
         "Icon": "/i/002000/002587.png",
         "Name": "Dragon Sight",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 1200
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 300. <span style=\"color:#00cc22;\">Additional Effect:</span> Strengthens the gaze of your <span style=\"color:#ff7b1a;\">Dragon Gauge</span> by 1 if under the effect of <span style=\"color:#ffff66;\">Blood of the Dragon</span> or <span style=\"color:#ffff66;\">Life of the Dragon</span><br />\n<br />\n Can only be executed when <span style=\"color:#ffff66;\">Dive Ready</span>.",
         "ID": 7399,
         "Icon": "/i/002000/002588.png",
         "Name": "Mirage Dive",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 10
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Instantly restores own HP.\n\n<span style=\"color:#00cc22;\">Cure Potency:</span> 500",
         "ID": 7541,
         "Icon": "/i/000000/000821.png",
         "Name": "Second Wind",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 1200
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Converts a portion of physical damage dealt into HP.\n\n<span style=\"color:#00cc22;\">Duration:</span> 20s",
         "ID": 7542,
         "Icon": "/i/000000/000823.png",
         "Name": "Bloodbath",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 900
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Nullifies all action direction requirements.\n\n<span style=\"color:#00cc22;\">Duration:</span> 10s\n\n<span style=\"color:#00cc22;\">Maximum Charges: </span>2",
         "ID": 7546,
         "Icon": "/i/000000/000830.png",
         "Name": "True North",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 450
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Creates a barrier nullifying most knockback and draw-in effects.\n\n<span style=\"color:#00cc22;\">Duration:</span> 6s\n\n<span style=\"color:#00cc22;\">Additional Effect:</span> <span style=\"color:#ffff66;\">Slow</span> +20% when barrier is struck\n\n<span style=\"color:#00cc22;\">Duration:</span> 15s",
         "ID": 7548,
         "Icon": "/i/000000/000822.png",
         "Name": "Arm's Length",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 1200
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Lowers target's strength and dexterity by 10%.\n\n<span style=\"color:#00cc22;\">Duration:</span> 10s",
         "ID": 7549,
         "Icon": "/i/000000/000828.png",
         "Name": "Feint",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 900
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Stuns target.\n\n<span style=\"color:#00cc22;\">Duration:</span> 3s",
         "ID": 7863,
         "Icon": "/i/000000/000824.png",
         "Name": "Leg Sweep",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 400
     },
     {
+        "ActionCategoryTargetID": 3,
         "ActionComboTargetID": 7397,
+        "Cast100ms": 0,
         "CastType": 4,
-        "DescriptionJSON": null,
+        "Description": "Delivers an attack with a potency of 100 to all enemies in a straight line before you.\n\n<span style=\"color:#00cc22;\">Combo Action: </span><span style=\"color:#ff7b1a;\">Sonic Thrust</span>\n\n<span style=\"color:#00cc22;\">Combo Potency: </span>230\n\n<span style=\"color:#00cc22;\">Combo Bonus: </span>Extends <span style=\"color:#ffff66;\">Blood of the Dragon</span> duration by 10s to a maximum of 30s",
         "ID": 16477,
         "Icon": "/i/002000/002590.png",
         "Name": "Coerthan Torment",
-        "PreservesCombo": 0
+        "PreservesCombo": 0,
+        "Recast100ms": 25
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 1,
-        "DescriptionJSON": null,
+        "Description": "Delivers a jumping attack with a potency of 400. Returns you to your original position after the attack is made.\n\n<span style=\"color:#00cc22;\">Additional Effect: </span>Grants <span style=\"color:#ffff66;\">Dive Ready</span>\n\n<span style=\"color:#00cc22;\">Duration: </span>15s\n\nCannot be executed while bound.",
         "ID": 16478,
         "Icon": "/i/002000/002591.png",
         "Name": "High Jump",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 300
     },
     {
+        "ActionCategoryTargetID": 4,
         "ActionComboTargetID": 0,
+        "Cast100ms": 0,
         "CastType": 2,
-        "DescriptionJSON": null,
+        "Description": "Delivers a jumping fire-based attack to target and all enemies nearby it with a potency of 600 for the first enemy, and 30% less for all remaining enemies.\n\nCan only be executed while under the effect of <span style=\"color:#ffff66;\">Life of the Dragon</span>.\n\nCannot be executed while bound.",
         "ID": 16480,
         "Icon": "/i/002000/002593.png",
         "Name": "Stardiver",
-        "PreservesCombo": 1
+        "PreservesCombo": 1,
+        "Recast100ms": 300
     }
 ]

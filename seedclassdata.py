@@ -14,7 +14,10 @@ SEARCH_FILTERS = [
 # TODO: Will need more columns than just this, like cast times.
 # NOTE: The DescriptionJson has conditionals for player levels, but will omit some
 # resource gain information.
-COLUMNS = ['ID', 'Name', 'Icon', 'DescriptionJSON', 'ActionComboTargetID', 'PreservesCombo', 'CastType']
+# ActionCategoryTargetID: 3 = Weaponskill, 2 = Spell
+COLUMNS = ['ID', 'Name', 'Icon', 'Description',
+           'ActionComboTargetID', 'PreservesCombo', 'CastType', 'Cast100ms', 'Recast100ms',
+           'ActionCategoryTargetID']
 SEARCH_VARS = {
     'indexes': 'Action',
     'columns': ','.join(COLUMNS)
