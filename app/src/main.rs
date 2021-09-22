@@ -7,6 +7,7 @@ use pages::{
 };
 mod switch;
 use switch::{AppAnchor, AppRoute, AppRouter, PublicUrlSwitch};
+mod models;
 
 pub enum Msg {
     ToggleNavbar,

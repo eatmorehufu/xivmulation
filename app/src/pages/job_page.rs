@@ -1,24 +1,13 @@
 use yew::prelude::*;
 use yew::{html, Html};
+use crate::models::{
+    skill::Skill, job::Job,
+};
+use super::skills_panel::SkillsPanel;
 
 #[derive(Clone, Debug, Eq, PartialEq, Properties)]
 pub struct Props {
     pub job_name: String,
-}
-
-#[derive(Debug)]
-pub struct Skill {
-    pub id: String,
-    pub name: String,
-    pub description: String,
-    pub icon_url: String,    
-}
-
-// Should this be the same job struct as in the sim?
-#[derive(Debug)]
-pub struct Job {
-    pub name: String,
-    pub skills: Vec<Skill>,
 }
 
 pub struct JobPage {    
@@ -63,22 +52,9 @@ impl Component for JobPage {
                         <h1 class="title is-1">{ "Job Page" }</h1>
                         <h2 class="subtitle">{ &job.name }</h2>
                     </div>
-                    <ul class="item-list">
-                      { for self.job.skills.iter().map(|skill| self.render_skill(skill))}
-                    </ul>
+                    <SkillsPanel skills=job.skills.clone()/>
                 </div>
-
             </div>
-        }
-    }
-}
-
-impl JobPage {
-    fn render_skill(&self, skill: &Skill) -> Html {
-        html! {
-            <li>
-                { &skill.name } 
-            </li>
         }
     }
 }
